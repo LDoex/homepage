@@ -19,7 +19,7 @@ name=memberinfo2
 
 ###
 
-GET http://localhost:8880/memberinfo/list?name=马
+GET http://localhost:8880/memberinfo/list
 Accept: application/json
 
 ###
