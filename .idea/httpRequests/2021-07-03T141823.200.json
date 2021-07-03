@@ -1,0 +1,36 @@
+{
+  "success": true,
+  "message": null,
+  "content": [
+    {
+      "id": 1,
+      "name": "李贝贝",
+      "category1Id": null,
+      "category2Id": null,
+      "description": "特聘副研究员，博/硕士生导师，四川省高层次引进人才",
+      "cover": null,
+      "viewCount": null,
+      "voteCount": null
+    },
+    {
+      "id": 2,
+      "name": "欧阳远凯",
+      "category1Id": null,
+      "category2Id": null,
+      "description": "2019级硕士生",
+      "cover": null,
+      "viewCount": null,
+      "voteCount": null
+    },
+    {
+      "id": 3,
+      "name": "马小霞",
+      "category1Id": null,
+      "category2Id": null,
+      "description": "2019级硕士生",
+      "cover": null,
+      "viewCount": null,
+      "voteCount": null
+    }
+  ]
+}
