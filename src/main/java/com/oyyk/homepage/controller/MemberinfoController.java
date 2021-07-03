@@ -1,6 +1,7 @@
 package com.oyyk.homepage.controller;
 
-import com.oyyk.homepage.domain.Memberinfo;
+import com.oyyk.homepage.req.MemberinfoReq;
+import com.oyyk.homepage.req.MemberinfoResp;
 import com.oyyk.homepage.resp.CommonResp;
 import com.oyyk.homepage.service.MemberinfoService;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +20,9 @@ public class MemberinfoController {
     private MemberinfoService memberinfoService;
 
     @RequestMapping("/list")
-    public CommonResp list(){
-        CommonResp<List<Memberinfo>> resp = new CommonResp<>();
-        List<Memberinfo> list = memberinfoService.list();
+    public CommonResp list(MemberinfoReq req){
+        CommonResp<List<MemberinfoResp>> resp = new CommonResp<>();
+        List<MemberinfoResp> list = memberinfoService.list(req);
         resp.setContent(list);
         return resp;
     }
