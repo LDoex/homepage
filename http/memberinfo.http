@@ -1,0 +1,25 @@
+GET http://localhost:8880/hello
+Accept: application/json
+
+> {%
+// client.memberinfo("memberinfo-hello",function(){
+//     client.log("memberinfo /hello");
+//     client.log(response.body);
+//     client.log(JSON.stringify(response.body));
+//     client.assert(response.status===200,"返回码不是200");
+//     client.assert(response.body==="Hello World!","结果验证失败");
+// });
+ %}
+###
+
+POST http://localhost:8880/hello/post
+Content-Type: application/x-www-form-urlencoded
+
+name=memberinfo2
+
+###
+
+GET http://localhost:8880/memberinfo/list
+Accept: application/json
+
+###
