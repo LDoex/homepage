@@ -75,7 +75,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent,ref } from 'vue';
+import { defineComponent,ref,onMounted } from 'vue';
 import axios from 'axios';
 
 const listData: Record<string, string>[] = [];
@@ -108,14 +108,19 @@ export default defineComponent({
 
     const list = ref();
 
-    axios.get("http://localhost:8880/memberinfo/list").then((response)=>{
-      const data = response.data;
-      if(data.success){
-        list.value = data.content;
-      } else{
-        list.value = data.message;
-      }
-    });
+
+
+    onMounted(()=>{
+      axios.get("/memberinfo/list").then((response)=>{
+        const data = response.data;
+        if(data.success){
+          list.value = data.content;
+          console.log(response);
+        } else{
+          list.value = data.message;
+        }
+      });
+    })
     return {
       list,
       pagination,
