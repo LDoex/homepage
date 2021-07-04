@@ -7,6 +7,7 @@ import com.oyyk.homepage.req.MemberinfoReq;
 import com.oyyk.homepage.req.MemberinfoResp;
 import com.oyyk.homepage.util.CopyUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -21,7 +22,9 @@ public class MemberinfoService {
         MemberinfoExample memberinfoExample = new MemberinfoExample();
         MemberinfoExample.Criteria criteria = memberinfoExample.createCriteria();
 
-        criteria.andNameLike("%"+req.getName()+"%");
+        if(!ObjectUtils.isEmpty(req.getName())) {
+            criteria.andNameLike("%" + req.getName() + "%");
+        }
 
         List<Memberinfo> memberinfoList = memberinfoMapper.selectByExample(memberinfoExample);
 
