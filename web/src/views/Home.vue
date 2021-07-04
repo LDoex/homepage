@@ -115,7 +115,6 @@ export default defineComponent({
         const data = response.data;
         if(data.success){
           list.value = data.content;
-          console.log(response);
         } else{
           list.value = data.message;
         }
