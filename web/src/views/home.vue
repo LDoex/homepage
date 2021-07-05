@@ -52,7 +52,7 @@
     <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
-      <a-list item-layout="vertical" size="large" :pagination="pagination" :data-source="list" :grid="{ gutter: 16, column: 3 }">
+      <a-list item-layout="vertical" size="large" :pagination="pagination" :data-source="list" :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 3, xl: 3, xxl: 3}">
         <template #renderItem="{ item }">
           <a-list-item key="item.name">
             <template #actions>
@@ -78,19 +78,6 @@
 import { defineComponent,ref,onMounted } from 'vue';
 import axios from 'axios';
 
-const listData: Record<string, string>[] = [];
-
-for (let i = 0; i < 23; i++) {
-  listData.push({
-    href: 'https://www.antdv.com/',
-    title: `ant design vue part ${i}`,
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    description:
-        'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-    content:
-        'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-  });
-}
 
 export default defineComponent({
   setup() {

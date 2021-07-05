@@ -76,7 +76,7 @@ export default defineComponent({
         key: 'viewCount',
       },
       {
-        title: 'Action',
+        title: '操作',
         key: 'action',
         slots: { customRender: 'action' },
       },
