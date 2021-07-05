@@ -132,7 +132,7 @@ export default defineComponent({
 <style scoped>
 .ant-avatar{
   width: 50px;
-  height: 50px;
+  height: 80px;
   line-height: 50px;
   border-radius: 8%;
   margin: 5px 0;
