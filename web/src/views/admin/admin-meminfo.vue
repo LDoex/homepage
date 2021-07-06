@@ -63,8 +63,8 @@
           <a-select-option value="beijing">Zone two</a-select-option>
         </a-select>
       </a-form-item>
-      <a-form-item label="访问量">
-        <a-input v-model:value="memberItem.viewCount" />
+      <a-form-item label="描述">
+        <a-input v-model:value="memberItem.description" />
       </a-form-item>
     </a-form>
   </a-modal>
@@ -169,8 +169,20 @@ export default defineComponent({
     const modalVisible = ref(false);
     const modalLoading = ref(false);
     const handleModalOk = () => {
-      modalVisible.value = false;
-      modalLoading.value = false;
+      axios.post("/memberinfo/save", memberItem.value).then((response)=>{
+        loading.value = false;
+        const data = response.data;
+        if(data.success) {
+          modalVisible.value = false;
+          modalLoading.value = false;
+
+          //重新加载列表
+          handleQuery({
+            page: pagination.value.current,
+            size: pagination.value.pageSize,
+          });
+        }
+      });
     }
 
     const edit = (record: any) => {

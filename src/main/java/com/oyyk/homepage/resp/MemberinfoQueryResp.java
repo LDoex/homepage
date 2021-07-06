@@ -1,6 +1,6 @@
 package com.oyyk.homepage.resp;
 
-public class MemberinfoResp {
+public class MemberinfoQueryResp {
     private Long id;
 
     private String name;
