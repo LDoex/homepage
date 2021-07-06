@@ -101,7 +101,7 @@ export default defineComponent({
       axios.get("/memberinfo/list").then((response)=>{
         const data = response.data;
         if(data.success){
-          list.value = data.content;
+          list.value = data.content.list;
         } else{
           list.value = data.message;
         }

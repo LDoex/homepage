@@ -1,4 +1,4 @@
-package com.oyyk.homepage.req;
+package com.oyyk.homepage.resp;
 
 public class MemberinfoResp {
     private Long id;

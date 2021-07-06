@@ -1,6 +1,6 @@
 package com.oyyk.homepage.req;
 
-public class MemberinfoReq {
+public class MemberinfoReq extends PageReq{
     private Long id;
 
     private String name;

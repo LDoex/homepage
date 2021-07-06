@@ -102,7 +102,7 @@ export default defineComponent({
         loading.value = false;
         const data = response.data;
         if(data.success){
-          memList.value = data.content;
+          memList.value = data.content.list;
         } else{
           memList.value = data.message;
         }
