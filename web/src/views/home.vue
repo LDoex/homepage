@@ -52,7 +52,7 @@
     <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
-      <a-list item-layout="vertical" size="large" :pagination="pagination" :data-source="list" :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 3, xl: 3, xxl: 3}">
+      <a-list item-layout="vertical" size="large" :data-source="list" :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 3, xl: 3, xxl: 3}">
         <template #renderItem="{ item }">
           <a-list-item key="item.name">
             <template #actions>
@@ -98,7 +98,12 @@ export default defineComponent({
 
 
     onMounted(()=>{
-      axios.get("/memberinfo/list").then((response)=>{
+      axios.get("/memberinfo/list", {
+        params: {
+          page: 1,
+          size: 1000
+        }
+        }).then((response)=>{
         const data = response.data;
         if(data.success){
           list.value = data.content.list;
