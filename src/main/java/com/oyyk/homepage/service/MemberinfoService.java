@@ -10,6 +10,7 @@ import com.oyyk.homepage.req.MemberinfoSaveReq;
 import com.oyyk.homepage.resp.MemberinfoQueryResp;
 import com.oyyk.homepage.resp.PageResp;
 import com.oyyk.homepage.util.CopyUtil;
+import com.oyyk.homepage.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,9 @@ public class MemberinfoService {
 
     @Resource
     private MemberinfoMapper memberinfoMapper;
+
+    @Resource
+    private SnowFlake snowFlake;
 
     public PageResp<MemberinfoQueryResp> list(MemberinfoQueryReq req){
 
@@ -57,6 +61,7 @@ public class MemberinfoService {
         Memberinfo memberinfo = CopyUtil.copy(req, Memberinfo.class);
         if(ObjectUtils.isEmpty(req.getId())){
             //新增
+            memberinfo.setId(snowFlake.nextId());
             memberinfoMapper.insert(memberinfo);
         }else{
             //更新

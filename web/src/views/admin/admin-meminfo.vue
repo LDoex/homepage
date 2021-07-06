@@ -3,6 +3,9 @@
     <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
+      <a-button type="primary" @click="add" size="large">
+        新增
+      </a-button>
       <a-table
           :columns="columns"
           :row-key="record => record.id"
@@ -53,14 +56,14 @@
       </a-form-item>
       <a-form-item label="分类">
         <a-select v-model:value="memberItem.category1Id" placeholder="please select your zone">
-          <a-select-option value="shanghai">Zone one</a-select-option>
-          <a-select-option value="beijing">Zone two</a-select-option>
+          <a-select-option value="1">1</a-select-option>
+          <a-select-option value="2">2</a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item label="人员类别">
         <a-select v-model:value="memberItem.category2Id" placeholder="please select your zone">
-          <a-select-option value="shanghai">Zone one</a-select-option>
-          <a-select-option value="beijing">Zone two</a-select-option>
+          <a-select-option value="3">3</a-select-option>
+          <a-select-option value="4">4</a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item label="描述">
@@ -185,9 +188,22 @@ export default defineComponent({
       });
     }
 
+    /**
+     * 编辑
+     * @param record
+     */
     const edit = (record: any) => {
       modalVisible.value = true;
       memberItem.value = record;
+    }
+
+    /**
+     * 新增
+     */
+    const add = () => {
+      modalVisible.value = true;
+      memberItem.value = {};
+
     }
 
 
@@ -207,6 +223,8 @@ export default defineComponent({
       handleTableChange,
 
       edit,
+      add,
+
       modalLoading,
       modalVisible,
       handleModalOk,
