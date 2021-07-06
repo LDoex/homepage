@@ -19,7 +19,7 @@
         </template>
         <template v-slot:action="{text, record}">
           <a-space size="small">
-            <a-button type="primary" @click="edit">
+            <a-button type="primary" @click="edit(record)">
               编辑
             </a-button>
             <a-button type="danger">
@@ -42,10 +42,31 @@
       title="编辑"
       v-model:visible="modalVisible"
       :confirm-loading="modalLoading"
-      @ok="handleModalOk">
-    <p>Some contents...</p>
-    <p>Some contents...</p>
-    <p>Some contents...</p>
+      @ok="handleModalOk"
+  >
+    <a-form :model="memberItem" :label-col="labelCol" :wrapper-col="wrapperCol">
+      <a-form-item label="封面">
+        <a-input v-model:value="memberItem.cover" />
+      </a-form-item>
+      <a-form-item label="姓名">
+        <a-input v-model:value="memberItem.name" />
+      </a-form-item>
+      <a-form-item label="分类">
+        <a-select v-model:value="memberItem.category1Id" placeholder="please select your zone">
+          <a-select-option value="shanghai">Zone one</a-select-option>
+          <a-select-option value="beijing">Zone two</a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item label="人员类别">
+        <a-select v-model:value="memberItem.category2Id" placeholder="please select your zone">
+          <a-select-option value="shanghai">Zone one</a-select-option>
+          <a-select-option value="beijing">Zone two</a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item label="访问量">
+        <a-input v-model:value="memberItem.viewCount" />
+      </a-form-item>
+    </a-form>
   </a-modal>
 </template>
 
@@ -92,6 +113,7 @@ export default defineComponent({
       },
     ];
 
+    const memberItem = ref({});
     const memList = ref();
     memList.value = [];
     
@@ -151,8 +173,9 @@ export default defineComponent({
       modalLoading.value = false;
     }
 
-    const edit = () => {
+    const edit = (record: any) => {
       modalVisible.value = true;
+      memberItem.value = record;
     }
 
 
@@ -175,6 +198,7 @@ export default defineComponent({
       modalLoading,
       modalVisible,
       handleModalOk,
+      memberItem,
 
     };
   },
