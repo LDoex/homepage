@@ -246,6 +246,7 @@ export default defineComponent({
       pagination,
       actions,
       columns,
+      loading,
       handleTableChange,
 
       edit,
