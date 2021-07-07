@@ -9,14 +9,6 @@
             :model="param"
         >
           <a-form-item>
-            <a-input-search
-                v-model:value="param.name"
-                placeholder="输入名字查询"
-                enter-button
-                @search="handleQuery({page: 1, size: pagination.pageSize})"
-            />
-          </a-form-item>
-          <a-form-item>
             <a-button type="primary" @click="add()" >
               新增
             </a-button>
@@ -28,9 +20,8 @@
           :columns="columns"
           :row-key="record => record.id"
           :data-source="memList"
-          :pagination="pagination"
           :loading="loading"
-          @change="handleTableChange"
+          :pagination="false"
       >
         <template #cover="{ text: cover }">
           <img v-if="cover" :src="cover" alt="avatar" height="80" width="50"/>
@@ -129,32 +120,18 @@ export default defineComponent({
     
     const loading = ref(false);
 
-    const pagination = ref({
-      current: 1,
-      pageSize: 3,
-      total: 0
-    });
 
     /**
      * 数据查询 handleQuery相当于一个对象实例
      **/
-    const handleQuery = (params: any) => {
+    const handleQuery = () => {
       loading.value = true;
-      axios.get("/homeCategory/list", {
-        params: {
-          page: params.page,
-          size: params.size,
-          name: param.value.name,
-        }
-      }).then((response)=>{
+      axios.get("/homeCategory/all").then((response)=>{
         loading.value = false;
         const data = response.data;
         if(data.success){
-          memList.value = data.content.list;
+          memList.value = data.content;
 
-          //重置分页
-          pagination.value.current = params.page;
-          pagination.value.total = data.content.total;
         } else{
           message.error(data.message);
         }
@@ -162,15 +139,6 @@ export default defineComponent({
       });
     }
 
-    /**
-     * 表格点击页码时触发
-     */
-    const handleTableChange = (pagination: any) => {
-      handleQuery({
-        page: pagination.current,
-        size: pagination.pageSize
-      });
-    };
 
     const actions: Record<string, string>[] = [
       { type: 'StarOutlined', text: '156' },
@@ -189,10 +157,7 @@ export default defineComponent({
           modalVisible.value = false;
 
           //重新加载列表
-          handleQuery({
-            page: pagination.value.current,
-            size: pagination.value.pageSize,
-          });
+          handleQuery();
         } else{
           message.error(data.message);
         }
@@ -222,10 +187,7 @@ export default defineComponent({
         const data = response.data;
         if(data.success) {
           //重新加载列表
-          handleQuery({
-            page: pagination.value.current,
-            size: pagination.value.pageSize,
-          });
+          handleQuery();
         }
       });
     };
@@ -234,20 +196,15 @@ export default defineComponent({
 
 
     onMounted(()=>{
-      handleQuery({
-        page: 1,
-        size: pagination.value.pageSize,
-      });
+      handleQuery();
     })
 
     return {
       memList,
       param,
-      pagination,
       actions,
       columns,
       loading,
-      handleTableChange,
       handleQuery,
 
       edit,

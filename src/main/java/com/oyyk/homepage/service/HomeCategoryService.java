@@ -53,6 +53,23 @@ public class HomeCategoryService {
 
     }
 
+    public List<HomeCategoryQueryResp> all(){
+
+        HomeCategoryExample homeCategoryExample = new HomeCategoryExample();
+
+        homeCategoryExample.setOrderByClause("sort asc");
+
+
+        List<HomeCategory> homeCategoryList = homeCategoryMapper.selectByExample(homeCategoryExample);
+
+
+        List<HomeCategoryQueryResp> list = CopyUtil.copyList(homeCategoryList, HomeCategoryQueryResp.class);
+
+
+        return list;
+
+    }
+
     //保存
     public void save(HomeCategorySaveReq req){
         HomeCategory homeCategory = CopyUtil.copy(req, HomeCategory.class);

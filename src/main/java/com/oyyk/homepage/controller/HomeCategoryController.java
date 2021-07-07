@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 
 @RestController
@@ -24,6 +25,13 @@ public class HomeCategoryController {
     public CommonResp list(@Valid HomeCategoryQueryReq req){
         CommonResp<PageResp<HomeCategoryQueryResp>> resp = new CommonResp<>();
         PageResp<HomeCategoryQueryResp> list = homeCategoryService.list(req);
+        resp.setContent(list);
+        return resp;
+    }
+    @RequestMapping("/all")
+    public CommonResp all(){
+        CommonResp<List<HomeCategoryQueryResp>> resp = new CommonResp<>();
+        List<HomeCategoryQueryResp> list = homeCategoryService.all();
         resp.setContent(list);
         return resp;
     }
