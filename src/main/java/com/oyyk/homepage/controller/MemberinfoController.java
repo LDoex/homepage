@@ -28,7 +28,7 @@ public class MemberinfoController {
         return resp;
     }
     @PostMapping("/save")
-    public CommonResp save(@RequestBody MemberinfoSaveReq req){
+    public CommonResp save(@Valid @RequestBody MemberinfoSaveReq req){
         CommonResp resp = new CommonResp<>();
         memberinfoService.save(req);
         return resp;

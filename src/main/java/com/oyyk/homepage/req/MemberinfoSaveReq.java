@@ -1,8 +1,11 @@
 package com.oyyk.homepage.req;
 
+import javax.validation.constraints.NotEmpty;
+
 public class MemberinfoSaveReq {
     private Long id;
 
+    @NotEmpty(message = "名称不能为空")
     private String name;
 
     private String email;
