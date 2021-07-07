@@ -13,8 +13,9 @@
       <a-menu-item key="/admin/memberinfo">
         <router-link to="/admin/memberinfo">团队人员管理</router-link>
       </a-menu-item>
-      <a-menu-item key="2">nav 2</a-menu-item>
-      <a-menu-item key="3">nav 3</a-menu-item>
+      <a-menu-item key="/admin/homeCategory">
+        <router-link to="/admin/homeCategory">主页分类管理</router-link>
+      </a-menu-item>
     </a-menu>
   </a-layout-header>
 </template>

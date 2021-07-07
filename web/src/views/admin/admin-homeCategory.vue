@@ -71,30 +71,18 @@
       okText="确认"
       cancelText="取消"
   >
-    <a-form :model="memberItem">
-      <a-form-item label="封面">
-        <a-input v-model:value="memberItem.cover" />
-      </a-form-item>
+    <a-form :model="homeCategoryItem">
       <a-form-item label="姓名">
-        <a-input v-model:value="memberItem.name" />
+        <a-input v-model:value="homeCategoryItem.name" />
       </a-form-item>
-      <a-form-item label="分类">
-        <a-select v-model:value="memberItem.category1Id" placeholder="please select your zone">
+      <a-form-item label="父分类">
+        <a-select v-model:value="homeCategoryItem.parent" placeholder="please select your zone">
           <a-select-option value="1">1</a-select-option>
           <a-select-option value="2">2</a-select-option>
         </a-select>
       </a-form-item>
-      <a-form-item label="人员类别">
-        <a-select v-model:value="memberItem.category2Id" placeholder="please select your zone">
-          <a-select-option value="3">3</a-select-option>
-          <a-select-option value="4">4</a-select-option>
-        </a-select>
-      </a-form-item>
-      <a-form-item label="邮箱">
-        <a-input v-model:value="memberItem.email" />
-      </a-form-item>
-      <a-form-item label="描述">
-        <a-input v-model:value="memberItem.description" />
+      <a-form-item label="顺序">
+        <a-input v-model:value="homeCategoryItem.sort" />
       </a-form-item>
     </a-form>
   </a-modal>
@@ -112,35 +100,18 @@ export default defineComponent({
 
     const columns = [
       {
-        title: '封面',
-        dataIndex: 'cover',
-        key: 'cover',
-        slots: {customRender: 'cover' },
-      },
-      {
         title: '姓名',
         dataIndex: 'name',
         key: 'name',
       },
       {
-        title: '邮箱',
-        key: 'email',
-        dataIndex: 'email',
+        title: '父分类',
+        dataIndex: 'parent',
       },
       {
-        title: '分类',
-        dataIndex: 'category1Id',
-      },
-      {
-        title: '人员类别',
-        key: 'category2Id',
-        dataIndex: 'category2Id',
-        slots: { customRender: 'tags' },
-      },
-      {
-        title: '点击量',
-        dataIndex: 'viewCount',
-        key: 'viewCount',
+        title: '顺序',
+        dataIndex: 'sort',
+        key: 'sort',
       },
       {
         title: '操作',
@@ -152,7 +123,7 @@ export default defineComponent({
     const param = ref();
     param.value = {};
 
-    const memberItem = ref({});
+    const homeCategoryItem = ref({});
     const memList = ref();
     memList.value = [];
     
@@ -169,7 +140,7 @@ export default defineComponent({
      **/
     const handleQuery = (params: any) => {
       loading.value = true;
-      axios.get("/memberinfo/list", {
+      axios.get("/homeCategory/list", {
         params: {
           page: params.page,
           size: params.size,
@@ -211,7 +182,7 @@ export default defineComponent({
     const modalVisible = ref(false);
     const modalLoading = ref(false);
     const handleModalOk = () => {
-      axios.post("/memberinfo/save", memberItem.value).then((response)=>{
+      axios.post("/homeCategory/save", homeCategoryItem.value).then((response)=>{
         modalLoading.value = false;
         const data = response.data;
         if(data.success) {
@@ -234,7 +205,7 @@ export default defineComponent({
      */
     const edit = (record: any) => {
       modalVisible.value = true;
-      memberItem.value = Tool.copy(record);
+      homeCategoryItem.value = Tool.copy(record);
     }
 
     /**
@@ -242,12 +213,12 @@ export default defineComponent({
      */
     const add = () => {
       modalVisible.value = true;
-      memberItem.value = {};
+      homeCategoryItem.value = {};
 
     }
 
     const handleDelete = (id: any) => {
-      axios.delete("/memberinfo/delete/"+id).then((response)=>{
+      axios.delete("/homeCategory/delete/"+id).then((response)=>{
         const data = response.data;
         if(data.success) {
           //重新加载列表
@@ -285,7 +256,7 @@ export default defineComponent({
       modalLoading,
       modalVisible,
       handleModalOk,
-      memberItem,
+      homeCategoryItem,
 
       handleDelete,
 
