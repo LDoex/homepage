@@ -6,7 +6,6 @@
       <p>
         <a-form
             layout="inline"
-            :model="param"
         >
           <a-form-item>
             <a-button type="primary" @click="add()" >
@@ -19,7 +18,7 @@
       <a-table
           :columns="columns"
           :row-key="record => record.id"
-          :data-source="memList"
+          :data-source="level1"
           :loading="loading"
           :pagination="false"
       >
@@ -68,8 +67,7 @@
       </a-form-item>
       <a-form-item label="父分类">
         <a-select v-model:value="homeCategoryItem.parent" placeholder="please select your zone">
-          <a-select-option value="1">1</a-select-option>
-          <a-select-option value="2">2</a-select-option>
+          <a-select-option v-for="c in level1" :key="c.id" :value="c.id" :disabled="homeCategoryItem.id === c.id">{{c.name}}</a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item label="顺序">
@@ -111,8 +109,21 @@ export default defineComponent({
       },
     ];
 
-    const param = ref();
-    param.value = {};
+    /**
+     * 一级分类树，children属性就是二级分类
+     * [{
+     *   id:"",
+     *   name: "",
+     *   children: [{
+     *     id: "",
+     *     name: "",
+     *   }]
+     * }]
+     **/
+    const level1 = ref();
+    level1.value = [];
+
+
 
     const homeCategoryItem = ref({});
     const memList = ref();
@@ -131,6 +142,9 @@ export default defineComponent({
         const data = response.data;
         if(data.success){
           memList.value = data.content;
+          console.log("原始数组", memList.value);
+          level1.value = Tool.array2Tree(memList.value, 0);
+          console.log("树形数组", level1.value);
 
         } else{
           message.error(data.message);
@@ -200,8 +214,7 @@ export default defineComponent({
     })
 
     return {
-      memList,
-      param,
+      level1,
       actions,
       columns,
       loading,
