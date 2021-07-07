@@ -7,13 +7,11 @@
         <a-form
             layout="inline"
             :model="param"
-            @finish="handleFinish"
-            @finishFailed="handleFinishFailed"
         >
           <a-form-item>
             <a-input-search
                 v-model:value="param.name"
-                placeholder="input search text"
+                placeholder="输入名字查询"
                 enter-button
                 @search="handleQuery({page: 1, size: pagination.pageSize})"
             />
@@ -70,6 +68,8 @@
       v-model:visible="modalVisible"
       :confirm-loading="modalLoading"
       @ok="handleModalOk"
+      okText="确认"
+      cancelText="取消"
   >
     <a-form :model="memberItem" :label-col="labelCol" :wrapper-col="wrapperCol">
       <a-form-item label="封面">
@@ -104,6 +104,7 @@
 import { defineComponent,ref,onMounted } from 'vue';
 import axios from 'axios';
 import { message } from 'ant-design-vue';
+import {Tool} from '@/util/tool';
 
 
 export default defineComponent({
@@ -233,7 +234,7 @@ export default defineComponent({
      */
     const edit = (record: any) => {
       modalVisible.value = true;
-      memberItem.value = record;
+      memberItem.value = Tool.copy(record);
     }
 
     /**
