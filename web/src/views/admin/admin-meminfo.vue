@@ -3,9 +3,29 @@
     <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
-      <a-button type="primary" @click="add" size="large">
-        新增
-      </a-button>
+      <p>
+        <a-form
+            layout="inline"
+            :model="param"
+            @finish="handleFinish"
+            @finishFailed="handleFinishFailed"
+        >
+          <a-form-item>
+            <a-input-search
+                v-model:value="param.name"
+                placeholder="input search text"
+                enter-button
+                @search="handleQuery({page: 1, size: pagination.pageSize})"
+            />
+          </a-form-item>
+          <a-form-item>
+            <a-button type="primary" @click="add()" >
+              新增
+            </a-button>
+          </a-form-item>
+        </a-form>
+
+      </p>
       <a-table
           :columns="columns"
           :row-key="record => record.id"
@@ -128,6 +148,9 @@ export default defineComponent({
       },
     ];
 
+    const param = ref();
+    param.value = {};
+
     const memberItem = ref({});
     const memList = ref();
     memList.value = [];
@@ -148,7 +171,8 @@ export default defineComponent({
       axios.get("/memberinfo/list", {
         params: {
           page: params.page,
-          size: params.size
+          size: params.size,
+          name: param.value.name,
         }
       }).then((response)=>{
         loading.value = false;
@@ -246,11 +270,13 @@ export default defineComponent({
 
     return {
       memList,
+      param,
       pagination,
       actions,
       columns,
       loading,
       handleTableChange,
+      handleQuery,
 
       edit,
       add,
