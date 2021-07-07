@@ -35,3 +35,22 @@ create table `memberInfo`(
 insert into `memberInfo` (id, email, name, description) values (1, '745661616@qq.com', '李贝贝', '特聘副研究员，博/硕士生导师，四川省高层次引进人才');
 insert into `memberInfo` (id, email, name, description) values (2, '745661616@qq.com', '欧阳远凯', '2019级硕士生');
 insert into `memberInfo` (id, email, name, description) values (3, '745661616@qq.com','马小霞', '2019级硕士生');
+
+# 主页分类
+drop table if exists `category`;
+create table `category` (
+                            `id` bigint not null comment 'id',
+                            `parent` bigint not null default 0 comment '父id',
+                            `name` varchar(50) not null comment '名称',
+                            `sort` int comment '顺序',
+                            primary key (`id`)
+) engine=innodb default charset=utf8mb4 comment='主页分类';
+
+insert into `category` (id, parent, name, sort) values (100, 000, '成员', 100);
+insert into `category` (id, parent, name, sort) values (101, 100, '老师', 101);
+insert into `category` (id, parent, name, sort) values (102, 100, '博士生', 102);
+insert into `category` (id, parent, name, sort) values (103, 100, '硕士生', 103);
+insert into `category` (id, parent, name, sort) values (104, 100, '本科生', 104);
+insert into `category` (id, parent, name, sort) values (200, 000, '关于我们', 200);
+insert into `category` (id, parent, name, sort) values (201, 200, '研究成果', 201);
+insert into `category` (id, parent, name, sort) values (202, 200, '团队近况', 202);
