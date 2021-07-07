@@ -52,11 +52,16 @@
             </a-popconfirm>
           </a-space>
         </template>
+        <template #category1="{ text, record }">
+          {{getCategoryName(record.category1Id)}}
+        </template>
         <template #tags="{ text: category2Id }">
           <a-tag
-              :color="category2Id === 'loser' ? 'volcano' : 'green'"
+              :color="getCategoryName(category2Id) === '教师' ? 'pink'
+              :getCategoryName(category2Id) === '博士生'? 'blue'
+              :getCategoryName(category2Id) === '硕士生'? 'green' :'geekblue'"
           >
-            {{ category2Id }}
+            {{ getCategoryName(category2Id) }}
           </a-tag>
         </template>
       </a-table>
@@ -79,16 +84,11 @@
         <a-input v-model:value="memberItem.name" />
       </a-form-item>
       <a-form-item label="分类">
-        <a-select v-model:value="memberItem.category1Id" placeholder="please select your zone">
-          <a-select-option value="1">1</a-select-option>
-          <a-select-option value="2">2</a-select-option>
-        </a-select>
-      </a-form-item>
-      <a-form-item label="人员类别">
-        <a-select v-model:value="memberItem.category2Id" placeholder="please select your zone">
-          <a-select-option value="3">3</a-select-option>
-          <a-select-option value="4">4</a-select-option>
-        </a-select>
+          <a-cascader
+              v-model:value="homeCategoryIds"
+              :options="level1"
+              :field-names="{label:'name', value:'id', children:'children'}"
+              placeholder="Please select" />
       </a-form-item>
       <a-form-item label="邮箱">
         <a-input v-model:value="memberItem.email" />
@@ -130,6 +130,7 @@ export default defineComponent({
       {
         title: '分类',
         dataIndex: 'category1Id',
+        slots: {customRender: 'category1' },
       },
       {
         title: '人员类别',
@@ -149,12 +150,28 @@ export default defineComponent({
       },
     ];
 
+    /**
+     * 一级分类树，children属性就是二级分类
+     * [{
+     *   id:"",
+     *   name: "",
+     *   children: [{
+     *     id: "",
+     *     name: "",
+     *   }]
+     * }]
+     **/
+    const level1 = ref();
+    level1.value = [];
+
+    const homeCategoryIds = ref();
     const param = ref();
     param.value = {};
 
-    const memberItem = ref({});
+    const memberItem = ref();
     const memList = ref();
     memList.value = [];
+    memberItem.value = {};
     
     const loading = ref(false);
 
@@ -163,6 +180,30 @@ export default defineComponent({
       pageSize: 3,
       total: 0
     });
+
+
+    let homeCategoryList: any;
+
+    /**
+     * 分类数据查询
+     **/
+    const handleCategoryQuery = () => {
+      loading.value = true;
+      axios.get("/homeCategory/all").then((response)=>{
+        loading.value = false;
+        const data = response.data;
+        if(data.success){
+          homeCategoryList = data.content;
+          console.log("原始数组", homeCategoryList);
+          level1.value = Tool.array2Tree(homeCategoryList, 0);
+          console.log("树形数组", level1.value);
+
+        } else{
+          message.error(data.message);
+        }
+
+      });
+    }
 
     /**
      * 数据查询 handleQuery相当于一个对象实例
@@ -201,16 +242,14 @@ export default defineComponent({
       });
     };
 
-    const actions: Record<string, string>[] = [
-      { type: 'StarOutlined', text: '156' },
-      { type: 'LikeOutlined', text: '156' },
-      { type: 'MessageOutlined', text: '2' },
-    ];
 
     // ------表单-------
     const modalVisible = ref(false);
     const modalLoading = ref(false);
     const handleModalOk = () => {
+      modalLoading.value = true;
+      memberItem.value.category1Id = homeCategoryIds.value[0];
+      memberItem.value.category2Id = homeCategoryIds.value[1];
       axios.post("/memberinfo/save", memberItem.value).then((response)=>{
         modalLoading.value = false;
         const data = response.data;
@@ -235,6 +274,7 @@ export default defineComponent({
     const edit = (record: any) => {
       modalVisible.value = true;
       memberItem.value = Tool.copy(record);
+      homeCategoryIds.value = [memberItem.value.category1Id, memberItem.value.category2Id];
     }
 
     /**
@@ -259,10 +299,26 @@ export default defineComponent({
       });
     };
 
+    /**
+     * 根据id查分类名称
+     **/
+    const getCategoryName = (cid: any) => {
+      //console.log(cid)
+      let result = "";
+      homeCategoryList.forEach((item:any)=>{
+        if(item.id === cid){
+          //return item.name; //直接return不起作用
+          result = item.name;
+        }
+      });
+      return result;
+    };
+
 
 
 
     onMounted(()=>{
+      handleCategoryQuery();
       handleQuery({
         page: 1,
         size: pagination.value.pageSize,
@@ -273,7 +329,6 @@ export default defineComponent({
       memList,
       param,
       pagination,
-      actions,
       columns,
       loading,
       handleTableChange,
@@ -288,6 +343,9 @@ export default defineComponent({
       memberItem,
 
       handleDelete,
+      homeCategoryIds,
+      level1,
+      getCategoryName,
 
     };
   },

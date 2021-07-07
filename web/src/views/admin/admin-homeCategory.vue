@@ -90,7 +90,7 @@ export default defineComponent({
 
     const columns = [
       {
-        title: '姓名',
+        title: '名称',
         dataIndex: 'name',
         key: 'name',
       },
