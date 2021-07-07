@@ -68,4 +68,8 @@ public class MemberinfoService {
             memberinfoMapper.updateByPrimaryKey(memberinfo);
         }
     }
+
+    public void delete(Long id){
+        memberinfoMapper.deleteByPrimaryKey(id);
+    }
 }

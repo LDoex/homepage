@@ -22,6 +22,7 @@ drop table if exists `memberInfo`;
 create table `memberInfo`(
                        `id` bigint not null comment 'id',
                        `name` varchar(50) comment '姓名',
+                       `email` varchar(100) comment '邮箱',
                        `category1_id` bigint comment '信息所属类别',
                        `category2_id` bigint comment '人员所属类别',
                        `description` varchar(200) comment '简介',
@@ -31,6 +32,6 @@ create table `memberInfo`(
                        primary key (`id`)
 ) engine=innodb default charset=utf8mb4 comment='团队成员信息表';
 
-insert into `memberInfo` (id, name, description) values (1, '李贝贝', '特聘副研究员，博/硕士生导师，四川省高层次引进人才');
-insert into `memberInfo` (id, name, description) values (2, '欧阳远凯', '2019级硕士生');
-insert into `memberInfo` (id, name, description) values (3, '马小霞', '2019级硕士生');
+insert into `memberInfo` (id, email, name, description) values (1, '745661616@qq.com', '李贝贝', '特聘副研究员，博/硕士生导师，四川省高层次引进人才');
+insert into `memberInfo` (id, email, name, description) values (2, '745661616@qq.com', '欧阳远凯', '2019级硕士生');
+insert into `memberInfo` (id, email, name, description) values (3, '745661616@qq.com','马小霞', '2019级硕士生');

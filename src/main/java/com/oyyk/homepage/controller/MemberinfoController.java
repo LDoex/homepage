@@ -6,10 +6,7 @@ import com.oyyk.homepage.resp.CommonResp;
 import com.oyyk.homepage.resp.MemberinfoQueryResp;
 import com.oyyk.homepage.resp.PageResp;
 import com.oyyk.homepage.service.MemberinfoService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -33,6 +30,12 @@ public class MemberinfoController {
     public CommonResp save(@RequestBody MemberinfoSaveReq req){
         CommonResp resp = new CommonResp<>();
         memberinfoService.save(req);
+        return resp;
+    }
+    @DeleteMapping("/delete/{id}")
+    public CommonResp delete(@PathVariable Long id){
+        CommonResp resp = new CommonResp<>();
+        memberinfoService.delete(id);
         return resp;
     }
 }

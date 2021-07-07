@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.oyyk.homepage.domain.Memberinfo">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="category1_id" jdbcType="BIGINT" property="category1Id" />
     <result column="category2_id" jdbcType="BIGINT" property="category2Id" />
     <result column="description" jdbcType="VARCHAR" property="description" />
@@ -70,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, `name`, category1_id, category2_id, description, cover, view_count, vote_count
+    id, `name`, email, category1_id, category2_id, description, cover, view_count, vote_count
   </sql>
   <select id="selectByExample" parameterType="com.oyyk.homepage.domain.MemberinfoExample" resultMap="BaseResultMap">
     select
@@ -103,12 +104,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.oyyk.homepage.domain.Memberinfo">
-    insert into memberinfo (id, `name`, category1_id, 
-      category2_id, description, cover, 
-      view_count, vote_count)
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{category1Id,jdbcType=BIGINT}, 
-      #{category2Id,jdbcType=BIGINT}, #{description,jdbcType=VARCHAR}, #{cover,jdbcType=VARCHAR}, 
-      #{viewCount,jdbcType=INTEGER}, #{voteCount,jdbcType=INTEGER})
+    insert into memberinfo (id, `name`, email, 
+      category1_id, category2_id, description, 
+      cover, view_count, vote_count
+      )
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{category1Id,jdbcType=BIGINT}, #{category2Id,jdbcType=BIGINT}, #{description,jdbcType=VARCHAR}, 
+      #{cover,jdbcType=VARCHAR}, #{viewCount,jdbcType=INTEGER}, #{voteCount,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.oyyk.homepage.domain.Memberinfo">
     insert into memberinfo
@@ -118,6 +121,9 @@
       </if>
       <if test="name != null">
         `name`,
+      </if>
+      <if test="email != null">
+        email,
       </if>
       <if test="category1Id != null">
         category1_id,
@@ -144,6 +150,9 @@
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
       </if>
       <if test="category1Id != null">
         #{category1Id,jdbcType=BIGINT},
@@ -180,6 +189,9 @@
       <if test="record.name != null">
         `name` = #{record.name,jdbcType=VARCHAR},
       </if>
+      <if test="record.email != null">
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
       <if test="record.category1Id != null">
         category1_id = #{record.category1Id,jdbcType=BIGINT},
       </if>
@@ -207,6 +219,7 @@
     update memberinfo
     set id = #{record.id,jdbcType=BIGINT},
       `name` = #{record.name,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
       category1_id = #{record.category1Id,jdbcType=BIGINT},
       category2_id = #{record.category2Id,jdbcType=BIGINT},
       description = #{record.description,jdbcType=VARCHAR},
@@ -222,6 +235,9 @@
     <set>
       <if test="name != null">
         `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
       </if>
       <if test="category1Id != null">
         category1_id = #{category1Id,jdbcType=BIGINT},
@@ -247,6 +263,7 @@
   <update id="updateByPrimaryKey" parameterType="com.oyyk.homepage.domain.Memberinfo">
     update memberinfo
     set `name` = #{name,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
       category1_id = #{category1Id,jdbcType=BIGINT},
       category2_id = #{category2Id,jdbcType=BIGINT},
       description = #{description,jdbcType=VARCHAR},

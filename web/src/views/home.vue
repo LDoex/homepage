@@ -56,9 +56,9 @@
         <template #renderItem="{ item }">
           <a-list-item key="item.name">
             <template #actions>
-          <span v-for="{ type, text } in actions" :key="type">
-            <component v-bind:is="type" style="margin-right: 8px" />
-            {{ text }}
+          <span class="email">
+            <component v-bind:is="'MailOutlined'" style="margin-right: 8px" />
+            {{ item.email }}
           </span>
             </template>
             <a-list-item-meta :description="item.description">
@@ -87,11 +87,6 @@ export default defineComponent({
       },
       pageSize: 3,
     };
-    const actions: Record<string, string>[] = [
-      { type: 'StarOutlined', text: '156' },
-      { type: 'LikeOutlined', text: '156' },
-      { type: 'MessageOutlined', text: '2' },
-    ];
 
     const list = ref();
 
@@ -115,7 +110,6 @@ export default defineComponent({
     return {
       list,
       pagination,
-      actions,
     };
   },
 });
@@ -128,5 +122,9 @@ export default defineComponent({
   line-height: 50px;
   border-radius: 8%;
   margin: 5px 0;
+}
+
+.email{
+  margin-left: 70px;
 }
 </style>

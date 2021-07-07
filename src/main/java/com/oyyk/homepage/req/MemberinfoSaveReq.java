@@ -5,6 +5,8 @@ public class MemberinfoSaveReq {
 
     private String name;
 
+    private String email;
+
     private Long category1Id;
 
     private Long category2Id;
@@ -31,6 +33,14 @@ public class MemberinfoSaveReq {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Long getCategory1Id() {
@@ -89,6 +99,7 @@ public class MemberinfoSaveReq {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", name=").append(name);
+        sb.append(", email=").append(email);
         sb.append(", category1Id=").append(category1Id);
         sb.append(", category2Id=").append(category2Id);
         sb.append(", description=").append(description);
