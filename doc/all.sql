@@ -37,7 +37,7 @@ insert into `memberInfo` (id, email, name, description) values (2, '745661616@qq
 insert into `memberInfo` (id, email, name, description) values (3, '745661616@qq.com','马小霞', '2019级硕士生');
 
 # 主页分类
-drop table if exists `category`;
+drop table if exists home_category;
 create table `category` (
                             `id` bigint not null comment 'id',
                             `parent` bigint not null default 0 comment '父id',
@@ -46,11 +46,11 @@ create table `category` (
                             primary key (`id`)
 ) engine=innodb default charset=utf8mb4 comment='主页分类';
 
-insert into `category` (id, parent, name, sort) values (100, 000, '成员', 100);
-insert into `category` (id, parent, name, sort) values (101, 100, '老师', 101);
-insert into `category` (id, parent, name, sort) values (102, 100, '博士生', 102);
-insert into `category` (id, parent, name, sort) values (103, 100, '硕士生', 103);
-insert into `category` (id, parent, name, sort) values (104, 100, '本科生', 104);
-insert into `category` (id, parent, name, sort) values (200, 000, '关于我们', 200);
-insert into `category` (id, parent, name, sort) values (201, 200, '研究成果', 201);
-insert into `category` (id, parent, name, sort) values (202, 200, '团队近况', 202);
+insert into home_category (id, parent, name, sort) values (100, 000, '成员', 100);
+insert into home_category (id, parent, name, sort) values (101, 100, '老师', 101);
+insert into home_category (id, parent, name, sort) values (102, 100, '博士生', 102);
+insert into home_category (id, parent, name, sort) values (103, 100, '硕士生', 103);
+insert into home_category (id, parent, name, sort) values (104, 100, '本科生', 104);
+insert into home_category (id, parent, name, sort) values (200, 000, '关于我们', 200);
+insert into home_category (id, parent, name, sort) values (201, 200, '研究成果', 201);
+insert into home_category (id, parent, name, sort) values (202, 200, '团队近况', 202);

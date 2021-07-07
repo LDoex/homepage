@@ -41,6 +41,6 @@
                              type="XMLMAPPER"/>
 <!--        <table tableName="demo"/>-->
 <!--        <table tableName="memberInfo"/>-->
-        <table tableName="category"/>
+        <table tableName="home_category"/>
     </context>
 </generatorConfiguration>
