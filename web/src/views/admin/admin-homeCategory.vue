@@ -67,6 +67,7 @@
       </a-form-item>
       <a-form-item label="父分类">
         <a-select v-model:value="homeCategoryItem.parent" placeholder="please select your zone">
+          <a-select-option value="0">无</a-select-option>
           <a-select-option v-for="c in level1" :key="c.id" :value="c.id" :disabled="homeCategoryItem.id === c.id">{{c.name}}</a-select-option>
         </a-select>
       </a-form-item>
@@ -122,6 +123,8 @@ export default defineComponent({
      **/
     const level1 = ref();
     level1.value = [];
+    const levelList = ref();
+    levelList.value = [];
 
 
 
@@ -145,6 +148,7 @@ export default defineComponent({
           console.log("原始数组", memList.value);
           level1.value = Tool.array2Tree(memList.value, 0);
           console.log("树形数组", level1.value);
+          levelList.value = Tool.copy(level1);
 
         } else{
           message.error(data.message);
