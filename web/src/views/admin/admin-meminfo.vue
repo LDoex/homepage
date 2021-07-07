@@ -155,12 +155,14 @@ export default defineComponent({
         const data = response.data;
         if(data.success){
           memList.value = data.content.list;
+
+          //重置分页
+          pagination.value.current = params.page;
+          pagination.value.total = data.content.total;
         } else{
-          memList.value = data.message;
+          message.error(data.message);
         }
-        //重置分页
-        pagination.value.current = params.page;
-        pagination.value.total = data.content.total;
+
       });
     }
 

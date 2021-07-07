@@ -9,6 +9,7 @@ import com.oyyk.homepage.service.MemberinfoService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
 
 @RestController
@@ -20,7 +21,7 @@ public class MemberinfoController {
     private MemberinfoService memberinfoService;
 
     @RequestMapping("/list")
-    public CommonResp list(MemberinfoQueryReq req){
+    public CommonResp list(@Valid MemberinfoQueryReq req){
         CommonResp<PageResp<MemberinfoQueryResp>> resp = new CommonResp<>();
         PageResp<MemberinfoQueryResp> list = memberinfoService.list(req);
         resp.setContent(list);
