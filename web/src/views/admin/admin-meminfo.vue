@@ -14,9 +14,6 @@
           :loading="loading"
           @change="handleTableChange"
       >
-        <template #name="{ text: name }">
-          <a>{{ name }}</a>
-        </template>
         <template #cover="{ text: cover }">
           <img v-if="cover" :src="cover" alt="avatar" height="80" width="50"/>
         </template>
@@ -73,6 +70,9 @@
           <a-select-option value="4">4</a-select-option>
         </a-select>
       </a-form-item>
+      <a-form-item label="邮箱">
+        <a-input v-model:value="memberItem.email" />
+      </a-form-item>
       <a-form-item label="描述">
         <a-input v-model:value="memberItem.description" />
       </a-form-item>
@@ -102,6 +102,11 @@ export default defineComponent({
         key: 'name',
       },
       {
+        title: '邮箱',
+        key: 'email',
+        dataIndex: 'email',
+      },
+      {
         title: '分类',
         dataIndex: 'category1Id',
       },
@@ -112,7 +117,7 @@ export default defineComponent({
         slots: { customRender: 'tags' },
       },
       {
-        title: '阅读数',
+        title: '点击量',
         dataIndex: 'viewCount',
         key: 'viewCount',
       },

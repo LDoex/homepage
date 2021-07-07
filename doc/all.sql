@@ -22,7 +22,7 @@ drop table if exists `memberInfo`;
 create table `memberInfo`(
                        `id` bigint not null comment 'id',
                        `name` varchar(50) comment '姓名',
-                       `email` varchar(100) comment '邮箱',
+                       `email` varchar(50) comment '邮箱',
                        `category1_id` bigint comment '信息所属类别',
                        `category2_id` bigint comment '人员所属类别',
                        `description` varchar(200) comment '简介',
