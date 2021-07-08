@@ -8,6 +8,7 @@
       <a-menu
           mode="inline"
           :style="{ height: '100%', borderRight: 0 }"
+          @click="handleTitleClick"
       >
         <template v-for="item in level1" :key="item.id">
           <template v-if="item.children">
@@ -23,7 +24,7 @@
               <a-menu-item
                   v-for="c in item.children"
                   :key="c.id"
-                  @click="handleTitleClick(item.name, c.id)">
+              >
                 <template #icon>
                   <PieChartOutlined />
                 </template>
@@ -79,9 +80,6 @@ import {message} from "ant-design-vue";
 
 export default defineComponent({
   setup() {
-    const pagination = {
-      pageSize: 3,
-    };
 
     const isHtml = ref(true);
     const list = ref();
@@ -89,6 +87,67 @@ export default defineComponent({
     const level1 = ref();
     level1.value = [];
     let homeCategoryList: any;
+
+    /**
+     * 根据id查分类名称
+     **/
+    const getCategoryName = (cid: any) => {
+      //console.log(cid)
+      let result = "";
+      homeCategoryList.forEach((item:any)=>{
+        if(item.id === cid){
+          //return item.name; //直接return不起作用
+          result = item.name;
+        }
+      });
+      return result;
+    };
+
+    /**
+     * 根据子id查父id
+     **/
+    const getParentId = (cid: any) => {
+      console.log(cid)
+      let result = "";
+      homeCategoryList.forEach((item:any)=>{
+        if(item.id === cid){
+          //return item.name; //直接return不起作用
+          result = item.parent;
+        }
+      });
+      return result;
+    };
+
+    /**
+     * 根据子id查父分类名称
+     **/
+    const getParentName = (cid: any) => {
+      //console.log(cid)
+      let result = "";
+      console.log("pid", getParentId(cid));
+      result = getCategoryName(getParentId(cid));
+      return result;
+    };
+
+    /**
+     * 列表数据查询
+     **/
+    const handleQuery = () => {
+      axios.get("/memberinfo/list", {
+        params: {
+          page: 1,
+          size: 500,
+          category2Id: category2Id,
+        }
+      }).then((response)=>{
+        const data = response.data;
+        if(data.success){
+          list.value = data.content.list;
+        } else{
+          list.value = data.message;
+        }
+      });
+    };
 
     /**
      * 分类数据查询
@@ -101,6 +160,9 @@ export default defineComponent({
           level1.value = Tool.array2Tree(homeCategoryList, 0);
           console.log("树形",level1.value);
 
+          //加载完分类数据才加载列表数据
+          handleQuery();
+
         } else{
           message.error(data.message);
         }
@@ -108,12 +170,15 @@ export default defineComponent({
       });
     };
 
+    let category2Id = 0;
+
     /**
      * 处理html和团队成员列表互斥显示
      */
-    const handleTitleClick = (titleName: any, id: any) => {
-      if(titleName === "成员"){
+    const handleTitleClick = (value: any) => {
+      if(getParentName(value.key) === "成员"){
         isHtml.value = false;
+        category2Id = value.key;
       } else {
         isHtml.value = true;
       }
@@ -123,23 +188,10 @@ export default defineComponent({
 
     onMounted(()=>{
       handleCategoryQuery();
-      axios.get("/memberinfo/list", {
-        params: {
-          page: 1,
-          size: 500
-        }
-        }).then((response)=>{
-        const data = response.data;
-        if(data.success){
-          list.value = data.content.list;
-        } else{
-          list.value = data.message;
-        }
-      });
-    })
+    });
+
     return {
       list,
-      pagination,
       level1,
       isHtml,
       handleTitleClick,
