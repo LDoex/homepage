@@ -179,6 +179,7 @@ export default defineComponent({
       if(getParentName(value.key) === "成员"){
         isHtml.value = false;
         category2Id = value.key;
+        handleQuery();
       } else {
         isHtml.value = true;
       }
