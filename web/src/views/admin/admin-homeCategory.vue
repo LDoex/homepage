@@ -62,7 +62,7 @@
       cancelText="取消"
   >
     <a-form :model="homeCategoryItem">
-      <a-form-item label="姓名">
+      <a-form-item label="名称">
         <a-input v-model:value="homeCategoryItem.name" />
       </a-form-item>
       <a-form-item label="父分类">

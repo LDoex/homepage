@@ -11,42 +11,32 @@
           v-model:openKeys="openKeys"
           :style="{ height: '100%', borderRight: 0 }"
       >
-        <a-sub-menu key="sub1">
-          <template #title>
+        <template v-for="item in level1" :key="item.id">
+          <template v-if="item.children">
+            <a-sub-menu :key="item.id">
+              <template #title>
               <span>
                 <user-outlined />
-                subnav 1
+                {{item.name}}
               </span>
+              </template>
+              <a-menu-item v-for="c in item.children" :key="c.id">
+                <template #icon>
+                  <PieChartOutlined />
+                </template>
+                {{ c.name }}
+              </a-menu-item>
+            </a-sub-menu>
           </template>
-          <a-menu-item key="1">option1</a-menu-item>
-          <a-menu-item key="2">option2</a-menu-item>
-          <a-menu-item key="3">option3</a-menu-item>
-          <a-menu-item key="4">option4</a-menu-item>
-        </a-sub-menu>
-        <a-sub-menu key="sub2">
-          <template #title>
-              <span>
-                <laptop-outlined />
-                subnav 2
-              </span>
+          <template v-else>
+            <a-menu-item :key="item.id">
+              <template #icon>
+                <PieChartOutlined />
+              </template>
+              {{ item.name }}
+            </a-menu-item>
           </template>
-          <a-menu-item key="5">option5</a-menu-item>
-          <a-menu-item key="6">option6</a-menu-item>
-          <a-menu-item key="7">option7</a-menu-item>
-          <a-menu-item key="8">option8</a-menu-item>
-        </a-sub-menu>
-        <a-sub-menu key="sub3">
-          <template #title>
-              <span>
-                <notification-outlined />
-                subnav 3
-              </span>
-          </template>
-          <a-menu-item key="9">option9</a-menu-item>
-          <a-menu-item key="10">option10</a-menu-item>
-          <a-menu-item key="11">option11</a-menu-item>
-          <a-menu-item key="12">option12</a-menu-item>
-        </a-sub-menu>
+        </template>
       </a-menu>
     </a-layout-sider>
     <a-layout-content
@@ -77,6 +67,8 @@
 <script lang="ts">
 import { defineComponent,ref,onMounted } from 'vue';
 import axios from 'axios';
+import {Tool} from "@/util/tool";
+import {message} from "ant-design-vue";
 
 
 export default defineComponent({
@@ -90,9 +82,32 @@ export default defineComponent({
 
     const list = ref();
 
+    const level1 = ref();
+    level1.value = [];
+    let homeCategoryList: any;
+
+    /**
+     * 分类数据查询
+     **/
+    const handleCategoryQuery = () => {
+      axios.get("/homeCategory/all").then((response)=>{
+        const data = response.data;
+        if(data.success){
+          homeCategoryList = data.content;
+          level1.value = Tool.array2Tree(homeCategoryList, 0);
+          console.log("树形",level1.value);
+
+        } else{
+          message.error(data.message);
+        }
+
+      });
+    }
+
 
 
     onMounted(()=>{
+      handleCategoryQuery();
       axios.get("/memberinfo/list", {
         params: {
           page: 1,
@@ -110,6 +125,7 @@ export default defineComponent({
     return {
       list,
       pagination,
+      level1,
     };
   },
 });
