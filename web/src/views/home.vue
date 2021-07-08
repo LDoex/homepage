@@ -7,20 +7,23 @@
         breakpoint='xl'>
       <a-menu
           mode="inline"
-          v-model:selectedKeys="selectedKeys2"
-          v-model:openKeys="openKeys"
           :style="{ height: '100%', borderRight: 0 }"
       >
         <template v-for="item in level1" :key="item.id">
           <template v-if="item.children">
-            <a-sub-menu :key="item.id">
+            <a-sub-menu
+                :key="item.id"
+            >
               <template #title>
               <span>
                 <user-outlined />
                 {{item.name}}
               </span>
               </template>
-              <a-menu-item v-for="c in item.children" :key="c.id">
+              <a-menu-item
+                  v-for="c in item.children"
+                  :key="c.id"
+                  @click="handleTitleClick(item.name, c.id)">
                 <template #icon>
                   <PieChartOutlined />
                 </template>
@@ -42,7 +45,10 @@
     <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
-      <a-list item-layout="vertical" size="large" :data-source="list" :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 3, xl: 3, xxl: 3}">
+      <div class="htmlLayout" v-show="isHtml">
+        <h1>html</h1>
+      </div>
+      <a-list v-show="!isHtml" item-layout="vertical" size="large" :data-source="list" :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 3, xl: 3, xxl: 3}">
         <template #renderItem="{ item }">
           <a-list-item key="item.name">
             <template #actions>
@@ -77,6 +83,7 @@ export default defineComponent({
       pageSize: 3,
     };
 
+    const isHtml = ref(true);
     const list = ref();
 
     const level1 = ref();
@@ -99,7 +106,18 @@ export default defineComponent({
         }
 
       });
-    }
+    };
+
+    /**
+     * 处理html和团队成员列表互斥显示
+     */
+    const handleTitleClick = (titleName: any, id: any) => {
+      if(titleName === "成员"){
+        isHtml.value = false;
+      } else {
+        isHtml.value = true;
+      }
+    };
 
 
 
@@ -123,6 +141,8 @@ export default defineComponent({
       list,
       pagination,
       level1,
+      isHtml,
+      handleTitleClick,
     };
   },
 });
