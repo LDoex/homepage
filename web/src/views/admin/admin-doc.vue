@@ -89,11 +89,13 @@ import { defineComponent,ref,onMounted } from 'vue';
 import axios from 'axios';
 import { message } from 'ant-design-vue';
 import {Tool} from '@/util/tool';
+import {useRoute} from "vue-router";
 
 
 export default defineComponent({
   setup() {
 
+    const route = useRoute();
     const columns = [
       {
         title: '名称',
@@ -243,7 +245,9 @@ export default defineComponent({
      */
     const add = () => {
       modalVisible.value = true;
-      docItem.value = {};
+      docItem.value = {
+        outcateId: route.query.outCateId,
+      };
 
       treeSelectData.value = Tool.copy(level1.value);
       //为树选择添加一个”无“

@@ -37,7 +37,7 @@
         </template>
         <template v-slot:action="{text, record}">
           <a-space size="small">
-            <router-link to="/admin/doc">
+            <router-link :to="'/admin/doc?outCateId=' + record.id">
             <a-button type="primary">
               主页设置
             </a-button>
