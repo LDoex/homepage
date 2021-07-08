@@ -194,10 +194,13 @@ export default defineComponent({
         const data = response.data;
         if(data.success){
           homeCategoryList = data.content;
-          console.log("原始数组", homeCategoryList);
           level1.value = Tool.array2Tree(homeCategoryList, 0);
-          console.log("树形数组", level1.value);
 
+          //解决axios异步问题，加载完分类后再加载页面，否则getCategoryName会出现空指针错
+          handleQuery({
+            page: 1,
+            size: pagination.value.pageSize,
+          });
         } else{
           message.error(data.message);
         }
@@ -319,11 +322,7 @@ export default defineComponent({
 
     onMounted(()=>{
       handleCategoryQuery();
-      handleQuery({
-        page: 1,
-        size: pagination.value.pageSize,
-      });
-    })
+    });
 
     return {
       memList,

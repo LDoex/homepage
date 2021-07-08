@@ -74,9 +74,6 @@ import {message} from "ant-design-vue";
 export default defineComponent({
   setup() {
     const pagination = {
-      onChange: (page: number) => {
-        console.log(page);
-      },
       pageSize: 3,
     };
 
