@@ -88,6 +88,9 @@
       <a-form-item label="姓名">
         <a-input v-model:value="memberItem.name" />
       </a-form-item>
+      <a-form-item label="姓名">
+        <a-input v-model:value="memberItem.name" />
+      </a-form-item>
       <a-form-item label="分类">
           <a-cascader
               v-model:value="homeCategoryIds"
