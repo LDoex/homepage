@@ -126,16 +126,6 @@
     </a-layout-content>
   </a-layout>
 
-<!--  <a-modal-->
-<!--      title="编辑"-->
-<!--      v-model:visible="modalVisible"-->
-<!--      :confirm-loading="modalLoading"-->
-<!--      @ok="handleModalOk"-->
-<!--      okText="确认"-->
-<!--      cancelText="取消"-->
-<!--  >-->
-<!--    -->
-<!--  </a-modal>-->
 </template>
 
 <script lang="ts">
@@ -201,7 +191,8 @@ export default defineComponent({
 
 
 
-    const docItem = ref({});
+    const docItem = ref();
+    docItem.value = {};
     const memList = ref();
     memList.value = [];
     
@@ -240,15 +231,19 @@ export default defineComponent({
     ];
 
     // ------表单-------
-    const modalVisible = ref(false);
     const modalLoading = ref(false);
     const handleSave = () => {
+      modalLoading.value = true;
+      docItem.value.content = editor.txt.html();
       axios.post("/doc/save", docItem.value).then((response)=>{
         modalLoading.value = false;
         const data = response.data;
         if(data.success) {
-          modalVisible.value = false;
 
+          message.success("保存成功");
+          //清空
+          editor.txt.html("");
+          docItem.value = {}
           //重新加载列表
           handleQuery();
         } else{
@@ -298,7 +293,6 @@ export default defineComponent({
       isProfile.value = false;
       //清空富文本框
       editor.txt.html("");
-      modalVisible.value = true;
       docItem.value = Tool.copy(record);
 
       treeSelectData.value = Tool.copy(level1.value);
@@ -315,7 +309,6 @@ export default defineComponent({
       isProfile.value = false;
       //清空富文本框
       editor.txt.html("");
-      modalVisible.value = true;
       docItem.value = {
         outcateId: route.query.outCateId,
       };
@@ -389,6 +382,9 @@ export default defineComponent({
       handleQuery();
       editor.create();
       profileEditor.create();
+      setTimeout(()=>{
+        add()
+      }, 100);
     })
 
     return {
@@ -402,7 +398,6 @@ export default defineComponent({
       add,
 
       modalLoading,
-      modalVisible,
       handleSave,
       docItem,
 
