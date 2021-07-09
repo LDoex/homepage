@@ -60,7 +60,7 @@
             </template>
             <a-list-item-meta :description="item.description">
               <template #title>
-                <router-link :to="'/doc?memberinfoId=' + item.id">
+                <router-link :to="'/doc?meminfoId=' + item.id">
                 {{item.name}}
                 </router-link>
               </template>

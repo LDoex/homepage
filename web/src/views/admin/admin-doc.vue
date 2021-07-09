@@ -4,7 +4,8 @@
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
       <a-row :gutter="24">
-        <a-col :span="8"><p>
+        <a-col :span="8">
+          <p>
           <a-form
               layout="inline"
           >
@@ -186,15 +187,13 @@ export default defineComponent({
      **/
     const level1 = ref();
     level1.value = [];
-    const levelList = ref();
-    levelList.value = [];
 
 
 
     const docItem = ref();
     docItem.value = {};
-    const memList = ref();
-    memList.value = [];
+    const docList = ref();
+    docList.value = [];
     
     const loading = ref(false);
 
@@ -205,23 +204,22 @@ export default defineComponent({
     const handleQuery = () => {
       loading.value = true;
       //如果不清空现有数据，则编辑保存重新加载数据后，再次编辑，则列表显示的还是编辑前的数据
-      memList.value = [];
+      docList.value = [];
       axios.get("/doc/all/"+route.query.outCateId).then((response)=>{
         loading.value = false;
         const data = response.data;
         if(data.success){
-          memList.value = data.content;
-          console.log("原始数组", memList.value);
-          level1.value = Tool.array2Tree(memList.value, 0);
+          docList.value = data.content;
+          console.log("原始数组", docList.value);
+          level1.value = Tool.array2Tree(docList.value, 0);
           console.log("树形数组", level1.value);
-          levelList.value = Tool.copy(level1);
 
         } else{
           message.error(data.message);
         }
 
       });
-    }
+    };
 
 
     const actions: Record<string, string>[] = [
@@ -404,7 +402,7 @@ export default defineComponent({
       setTimeout(()=>{
         add()
       }, 100);
-    })
+    });
 
     return {
       level1,
