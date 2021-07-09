@@ -88,9 +88,6 @@
       <a-form-item label="姓名">
         <a-input v-model:value="memberItem.name" />
       </a-form-item>
-      <a-form-item label="姓名">
-        <a-input v-model:value="memberItem.name" />
-      </a-form-item>
       <a-form-item label="分类">
           <a-cascader
               v-model:value="homeCategoryIds"
@@ -257,7 +254,7 @@ export default defineComponent({
     // ------表单-------
     const modalVisible = ref(false);
     const modalLoading = ref(false);
-    const handleModalOk = () => {
+    const handleSave = () => {
       modalLoading.value = true;
       memberItem.value.category1Id = homeCategoryIds.value[0];
       memberItem.value.category2Id = homeCategoryIds.value[1];
@@ -346,7 +343,7 @@ export default defineComponent({
 
       modalLoading,
       modalVisible,
-      handleModalOk,
+      handleSave,
       memberItem,
 
       handleDelete,

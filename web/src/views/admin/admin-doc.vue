@@ -3,85 +3,117 @@
     <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
-      <p>
-        <a-form
-            layout="inline"
-        >
-          <a-form-item>
-            <a-button type="primary" @click="add()" >
-              新增
-            </a-button>
-          </a-form-item>
-        </a-form>
-
-      </p>
-      <a-table
-          :columns="columns"
-          :row-key="record => record.id"
-          :data-source="level1"
-          :loading="loading"
-          :pagination="false"
-      >
-        <template #cover="{ text: cover }">
-          <img v-if="cover" :src="cover" alt="avatar" height="80" width="50"/>
-        </template>
-        <template v-slot:action="{text, record}">
-          <a-space size="small">
-            <a-button type="primary" @click="edit(record)">
-              编辑
-            </a-button>
-            <a-popconfirm
-                title="确认删除?"
-                ok-text="是"
-                cancel-text="否"
-                @confirm="handleDelete(record.id)"
-            >
-                <a-button type="danger">
-                  删除
-                </a-button>
-            </a-popconfirm>
-          </a-space>
-        </template>
-        <template #tags="{ text: category2Id }">
-          <a-tag
-              :color="category2Id === 'loser' ? 'volcano' : 'green'"
+      <a-row :gutter="24">
+        <a-col :span="8"><p>
+          <a-form
+              layout="inline"
           >
-            {{ category2Id }}
-          </a-tag>
-        </template>
-      </a-table>
+            <a-form-item>
+              <a-button type="primary" @click="handleQuery()">
+                刷新列表
+              </a-button>
+            </a-form-item>
+          </a-form>
+
+        </p>
+          <a-table
+              :columns="columns"
+              :row-key="record => record.id"
+              :data-source="level1"
+              :loading="loading"
+              :pagination="false"
+              size="small"
+          >
+            <template #name="{ text, record }">
+              {{record.sort}} {{record.name}}
+            </template>
+            <template v-slot:action="{text, record}">
+              <a-space size="small">
+                <a-button type="primary" @click="edit(record)" size="small">
+                  编辑
+                </a-button>
+                <a-popconfirm
+                    title="确认删除?"
+                    ok-text="是"
+                    cancel-text="否"
+                    @confirm="handleDelete(record.id)"
+                >
+                  <a-button type="danger" size="small">
+                    删除
+                  </a-button>
+                </a-popconfirm>
+              </a-space>
+            </template>
+            <template #tags="{ text: category2Id }">
+              <a-tag
+                  :color="category2Id === 'loser' ? 'volcano' : 'green'"
+              >
+                {{ category2Id }}
+              </a-tag>
+            </template>
+          </a-table>
+        </a-col>
+        <a-col :span="16">
+          <p>
+            <a-form
+                layout="inline"
+            >
+              <a-form-item>
+                <a-button type="primary" @click="add()" >
+                  编辑新增
+                </a-button>
+              </a-form-item>
+              <a-form-item>
+                <a-button type="primary" @click="handleSave()">
+                  保存
+                </a-button>
+              </a-form-item>
+            </a-form>
+          </p>
+          <a-form :model="docItem" layout="vertical">
+            <a-form-item>
+              <a-input v-model:value="docItem.name" placeholder="请输入名称"/>
+            </a-form-item>
+            <a-form-item>
+              <a-tree-select
+                  v-model:value="docItem.parent"
+                  style="width: 100%"
+                  :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+                  :tree-data="treeSelectData"
+                  placeholder="请选择分类"
+                  tree-default-expand-all
+                  :replaceFields="{title: 'name', key: 'id', value: 'id'}"
+              >
+              </a-tree-select>
+            </a-form-item>
+            <a-form-item>
+              <a-input v-model:value="docItem.sort" placeholder="请输入顺序编号"/>
+            </a-form-item>
+            <a-form-item>
+              <a-button type="primary">
+                <EyeOutlined /> 预览
+              </a-button>
+            </a-form-item>
+            <a-form-item>
+              <div id="contentEditor"></div>
+            </a-form-item>
+          </a-form>
+        </a-col>
+      </a-row>
+
     </a-layout-content>
   </a-layout>
 
-  <a-modal
-      title="编辑"
-      v-model:visible="modalVisible"
-      :confirm-loading="modalLoading"
-      @ok="handleModalOk"
-      okText="确认"
-      cancelText="取消"
-  >
-    <a-form :model="docItem">
-      <a-form-item label="名称">
-        <a-input v-model:value="docItem.name" />
-      </a-form-item>
-      <a-form-item label="父文档">
-        <a-tree-select
-            v-model:value="docItem.parent"
-            style="width: 100%"
-            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-            :tree-data="treeSelectData"
-            placeholder="Please select"
-            tree-default-expand-all
-            :replaceFields="{title: 'name', key: 'id', value: 'id'}"
-        >
-        </a-tree-select>
-      </a-form-item>
-      <a-form-item label="顺序">
-        <a-input v-model:value="docItem.sort" />
-      </a-form-item>
-    </a-form>
-  </a-modal>
+<!--  <a-modal-->
+<!--      title="编辑"-->
+<!--      v-model:visible="modalVisible"-->
+<!--      :confirm-loading="modalLoading"-->
+<!--      @ok="handleModalOk"-->
+<!--      okText="确认"-->
+<!--      cancelText="取消"-->
+<!--  >-->
+<!--    -->
+<!--  </a-modal>-->
 </template>
 
 <script lang="ts">
@@ -91,10 +123,17 @@ import {message, Modal} from 'ant-design-vue';
 import {Tool} from '@/util/tool';
 import {useRoute} from "vue-router";
 import {ExclamationCircleOutlined} from "@ant-design/icons-vue";
+import E from "wangeditor";
 
 
 export default defineComponent({
   setup() {
+
+    const editor = new E("#contentEditor");
+
+    //文本框置底，允许上传图片
+    editor.config.zIndex = 0;
+    editor.config.uploadImgShowBase64 = true;
 
     const route = useRoute();
     const columns = [
@@ -102,15 +141,7 @@ export default defineComponent({
         title: '名称',
         dataIndex: 'name',
         key: 'name',
-      },
-      {
-        title: '父分类',
-        dataIndex: 'parent',
-      },
-      {
-        title: '顺序',
-        dataIndex: 'sort',
-        key: 'sort',
+        slots: { customRender: 'name' },
       },
       {
         title: '操作',
@@ -231,6 +262,8 @@ export default defineComponent({
      * @param record
      */
     const edit = (record: any) => {
+      //清空富文本框
+      editor.txt.html("");
       modalVisible.value = true;
       docItem.value = Tool.copy(record);
 
@@ -245,6 +278,8 @@ export default defineComponent({
      * 新增
      */
     const add = () => {
+      //清空富文本框
+      editor.txt.html("");
       modalVisible.value = true;
       docItem.value = {
         outcateId: route.query.outCateId,
@@ -317,6 +352,7 @@ export default defineComponent({
 
     onMounted(()=>{
       handleQuery();
+      editor.create();
     })
 
     return {
