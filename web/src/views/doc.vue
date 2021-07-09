@@ -60,13 +60,16 @@ export default defineComponent({
     /**
      * 内容查询
      **/
-
-    let id: any=68609776132689920;
+    const ids: Array<string> = [];
     const handleQueryContent = () => {
-      for (let docListItem in docList) {
-        console.log(docListItem);
+
+      //从docList.value拿到key值，再用key作为索引查id
+      for (let docListKey in docList.value) {
+        // console.log("id:",docList.value);
+        // console.log("id:",docListKey);
+        ids.push(docList.value[docListKey].id);
       }
-      axios.get("/doc/find-contents/68607729803071488,68609776132689920").then((response) => {
+      axios.get("/doc/find-contents/"+ids.join(',')).then((response) => {
         const data = response.data;
         if(data.success){
           message.success("chenggong");
