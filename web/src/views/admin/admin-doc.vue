@@ -13,6 +13,16 @@
                 刷新列表
               </a-button>
             </a-form-item>
+            <a-form-item>
+              <a-button type="primary" @click="handleProfileView()">
+                简介编辑
+              </a-button>
+            </a-form-item>
+            <a-form-item>
+              <a-button type="primary" @click="add()" >
+                新增类别
+              </a-button>
+            </a-form-item>
           </a-form>
 
         </p>
@@ -53,16 +63,26 @@
             </template>
           </a-table>
         </a-col>
+
         <a-col :span="16">
+          <a-form
+              layout="inline"
+              v-show="isProfile"
+          >
+            <a-form-item>
+              <a-button type="primary" >
+                编辑新增
+              </a-button>
+            </a-form-item>
+            <a-form-item>
+              <div id="profileEditor"></div>
+            </a-form-item>
+          </a-form>
           <p>
             <a-form
                 layout="inline"
+                v-show="!isProfile"
             >
-              <a-form-item>
-                <a-button type="primary" @click="add()" >
-                  编辑新增
-                </a-button>
-              </a-form-item>
               <a-form-item>
                 <a-button type="primary" @click="handleSave()">
                   保存
@@ -70,7 +90,7 @@
               </a-form-item>
             </a-form>
           </p>
-          <a-form :model="docItem" layout="vertical">
+          <a-form :model="docItem" layout="vertical" v-show="!isProfile">
             <a-form-item>
               <a-input v-model:value="docItem.name" placeholder="请输入名称"/>
             </a-form-item>
@@ -129,11 +149,22 @@ import E from "wangeditor";
 export default defineComponent({
   setup() {
 
+    const isProfile = ref(false);
     const editor = new E("#contentEditor");
+    const profileEditor = new E("#profileEditor");
 
     //文本框置底，允许上传图片
     editor.config.zIndex = 0;
     editor.config.uploadImgShowBase64 = true;
+
+    //处理简介编辑显示
+    const handleProfileView = () => {
+      isProfile.value = true;
+    }
+    //处理简介编辑显示
+    const handleProfileSave = () => {
+      isProfile.value = false;
+    }
 
     const route = useRoute();
     const columns = [
@@ -209,7 +240,7 @@ export default defineComponent({
     // ------表单-------
     const modalVisible = ref(false);
     const modalLoading = ref(false);
-    const handleModalOk = () => {
+    const handleSave = () => {
       axios.post("/doc/save", docItem.value).then((response)=>{
         modalLoading.value = false;
         const data = response.data;
@@ -262,6 +293,7 @@ export default defineComponent({
      * @param record
      */
     const edit = (record: any) => {
+      isProfile.value = false;
       //清空富文本框
       editor.txt.html("");
       modalVisible.value = true;
@@ -278,6 +310,7 @@ export default defineComponent({
      * 新增
      */
     const add = () => {
+      isProfile.value = false;
       //清空富文本框
       editor.txt.html("");
       modalVisible.value = true;
@@ -353,6 +386,7 @@ export default defineComponent({
     onMounted(()=>{
       handleQuery();
       editor.create();
+      profileEditor.create();
     })
 
     return {
@@ -367,11 +401,14 @@ export default defineComponent({
 
       modalLoading,
       modalVisible,
-      handleModalOk,
+      handleSave,
       docItem,
 
       handleDelete,
       treeSelectData,
+
+      handleProfileView,
+      isProfile,
 
 
     };

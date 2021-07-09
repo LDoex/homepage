@@ -254,7 +254,7 @@ export default defineComponent({
     // ------表单-------
     const modalVisible = ref(false);
     const modalLoading = ref(false);
-    const handleSave = () => {
+    const handleModalOk = () => {
       modalLoading.value = true;
       memberItem.value.category1Id = homeCategoryIds.value[0];
       memberItem.value.category2Id = homeCategoryIds.value[1];
@@ -343,7 +343,7 @@ export default defineComponent({
 
       modalLoading,
       modalVisible,
-      handleSave,
+      handleModalOk,
       memberItem,
 
       handleDelete,
