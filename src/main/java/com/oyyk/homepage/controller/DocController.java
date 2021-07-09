@@ -1,5 +1,6 @@
 package com.oyyk.homepage.controller;
 
+import com.oyyk.homepage.domain.Content;
 import com.oyyk.homepage.req.DocQueryReq;
 import com.oyyk.homepage.req.DocSaveReq;
 import com.oyyk.homepage.resp.CommonResp;
@@ -30,6 +31,15 @@ public class DocController {
         resp.setContent(list);
         return resp;
     }
+    @RequestMapping("/find-contents/{idsStr}")
+    public CommonResp findContent(@PathVariable String idsStr){
+        CommonResp<List<Content>> resp = new CommonResp<>();
+        List<String> list = Arrays.asList(idsStr.split(","));
+        List<Content> content = docService.findContent(list);
+        resp.setContent(content);
+        return resp;
+    }
+
     @RequestMapping("/find-content/{id}")
     public CommonResp findContent(@PathVariable Long id){
         CommonResp<String> resp = new CommonResp<>();

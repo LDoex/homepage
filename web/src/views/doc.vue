@@ -11,6 +11,9 @@
     </a-col>
     <a-col :span="16">
       <div class="anchor">sdf</div>
+      <a-button type="primary" @click="handleQueryContent" >
+        查找
+      </a-button>
     </a-col>
   </a-row>
 
@@ -54,6 +57,25 @@ export default defineComponent({
       });
     };
 
+    /**
+     * 内容查询
+     **/
+
+    let id: any=68609776132689920;
+    const handleQueryContent = () => {
+      for (let docListItem in docList) {
+        console.log(docListItem);
+      }
+      axios.get("/doc/find-contents/68607729803071488,68609776132689920").then((response) => {
+        const data = response.data;
+        if(data.success){
+          message.success("chenggong");
+        } else{
+          message.error(data.message);
+        }
+      });
+    };
+
     onMounted(()=>{
       handleQuery();
     });
@@ -61,6 +83,7 @@ export default defineComponent({
     return {
       onChange,
       level1,
+      handleQueryContent,
     };
   },
 });

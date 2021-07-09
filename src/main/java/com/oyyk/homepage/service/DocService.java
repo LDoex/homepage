@@ -3,6 +3,7 @@ package com.oyyk.homepage.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.oyyk.homepage.domain.Content;
+import com.oyyk.homepage.domain.ContentExample;
 import com.oyyk.homepage.domain.Doc;
 import com.oyyk.homepage.domain.DocExample;
 import com.oyyk.homepage.mapper.ContentMapper;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -118,6 +120,18 @@ public class DocService {
             return "";
         } else {
             return content.getContent();
+        }
+    }
+    public List<Content> findContent(List<String> idsStr){
+        ContentExample contentExample = new ContentExample();
+        ContentExample.Criteria criteria = contentExample.createCriteria();
+
+        criteria.andIdIn(idsStr);
+        List<Content> contents = contentMapper.selectByExampleWithBLOBs(contentExample);
+        if(ObjectUtils.isEmpty(contents)){
+            return Collections.emptyList();
+        } else {
+            return contents;
         }
     }
 
