@@ -36,9 +36,9 @@
                 cancel-text="否"
                 @confirm="handleDelete(record.id)"
             >
-              <a-button type="danger">
-                删除
-              </a-button>
+                <a-button type="danger">
+                  删除
+                </a-button>
             </a-popconfirm>
           </a-space>
         </template>
@@ -85,11 +85,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent,ref,onMounted } from 'vue';
+import {createVNode, defineComponent,ref,onMounted } from 'vue';
 import axios from 'axios';
-import { message } from 'ant-design-vue';
+import {message, Modal} from 'ant-design-vue';
 import {Tool} from '@/util/tool';
 import {useRoute} from "vue-router";
+import {ExclamationCircleOutlined} from "@ant-design/icons-vue";
 
 
 export default defineComponent({
@@ -286,16 +287,33 @@ export default defineComponent({
       }
     };
 
+
     const handleDelete = (id: any) => {
+      // 清空数组，否则多次删除时，数组会一直增加
+      ids.length = 0;
       getDeleteIds(level1.value, id);
-      axios.delete("/doc/delete/"+ids.join(",")).then((response)=>{
-        const data = response.data;
-        if(data.success) {
-          //重新加载列表
-          handleQuery();
-        }
+      Modal.confirm({
+        okText: "确认",
+        cancelText: "取消",
+        title: '确定删除?',
+        icon: createVNode(ExclamationCircleOutlined),
+        content: createVNode('div', { style: 'color:red;' }, '确定删除该节点下所有内容？'),
+        onOk() {
+          axios.delete("/doc/delete/" + ids.join(",")).then((response) => {
+            const data = response.data;
+            if (data.success) {
+              //重新加载列表
+              handleQuery();
+            }
+          });
+        },
+        onCancel() {
+          console.log('Cancel');
+        },
+        class: 'test',
       });
-    };
+      };
+
 
     onMounted(()=>{
       handleQuery();
@@ -318,6 +336,7 @@ export default defineComponent({
 
       handleDelete,
       treeSelectData,
+
 
     };
   },
