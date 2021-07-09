@@ -53,9 +53,12 @@ public class DocService {
 
     }
 
-    public List<DocQueryResp> all(){
+    public List<DocQueryResp> all(Long outCateId){
 
         DocExample docExample = new DocExample();
+        DocExample.Criteria criteria = docExample.createCriteria();
+
+        criteria.andOutcateIdEqualTo(outCateId);
 
         docExample.setOrderByClause("sort asc");
 
@@ -85,5 +88,11 @@ public class DocService {
 
     public void delete(Long id){
         docMapper.deleteByPrimaryKey(id);
+    }
+    public void delete(List<String> ids){
+        DocExample docExample = new DocExample();
+        DocExample.Criteria criteria = docExample.createCriteria();
+        criteria.andIdIn(ids);
+        docMapper.deleteByExample(docExample);
     }
 }

@@ -150,7 +150,7 @@ export default defineComponent({
       loading.value = true;
       //如果不清空现有数据，则编辑保存重新加载数据后，再次编辑，则列表显示的还是编辑前的数据
       memList.value = [];
-      axios.get("/doc/all").then((response)=>{
+      axios.get("/doc/all/"+route.query.outCateId).then((response)=>{
         loading.value = false;
         const data = response.data;
         if(data.success){
@@ -255,8 +255,40 @@ export default defineComponent({
 
     }
 
+    /**
+     * 递归将某节点及其子孙节点全部删除
+     * */
+    const ids: Array<string> = [];
+    const getDeleteIds = (treeSelectData: any, id: any) => {
+      //console.log("treeSelecData结构：",treeSelectData, id);
+      for(let i = 0; i<treeSelectData.length; i++){
+        const node = treeSelectData[i];
+        if(node.id === id){
+          //如果当前节点就是目标节点
+          //将目标节点加入ids
+          ids.push(node.id);
+
+          //遍历所有子节点，将所有子节点全部push进ids
+          const children = node.children;
+          if(Tool.isNotEmpty(children)){
+            for(let j=0; j<children.length; j++){
+              getDeleteIds(children, children[j].id);
+            }
+          }
+        }
+        else{
+          //如果当前节点不是目标节点，则到其子节点再找
+          const children = node.children;
+          if(Tool.isNotEmpty(children)){
+            getDeleteIds(children, id);
+          }
+        }
+      }
+    };
+
     const handleDelete = (id: any) => {
-      axios.delete("/doc/delete/"+id).then((response)=>{
+      getDeleteIds(level1.value, id);
+      axios.delete("/doc/delete/"+ids.join(",")).then((response)=>{
         const data = response.data;
         if(data.success) {
           //重新加载列表
@@ -264,10 +296,6 @@ export default defineComponent({
         }
       });
     };
-
-
-
-
 
     onMounted(()=>{
       handleQuery();

@@ -6,10 +6,12 @@ import com.oyyk.homepage.resp.CommonResp;
 import com.oyyk.homepage.resp.DocQueryResp;
 import com.oyyk.homepage.resp.PageResp;
 import com.oyyk.homepage.service.DocService;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -28,10 +30,10 @@ public class DocController {
         resp.setContent(list);
         return resp;
     }
-    @RequestMapping("/all")
-    public CommonResp all(){
+    @RequestMapping("/all/{outCateId}")
+    public CommonResp all(@PathVariable Long outCateId){
         CommonResp<List<DocQueryResp>> resp = new CommonResp<>();
-        List<DocQueryResp> list = docService.all();
+        List<DocQueryResp> list = docService.all(outCateId);
         resp.setContent(list);
         return resp;
     }
@@ -41,10 +43,13 @@ public class DocController {
         docService.save(req);
         return resp;
     }
-    @DeleteMapping("/delete/{id}")
-    public CommonResp delete(@PathVariable Long id){
+    @DeleteMapping("/delete/{idsStr}")
+    public CommonResp delete(@PathVariable String idsStr){
         CommonResp resp = new CommonResp<>();
-        docService.delete(id);
+        if(!ObjectUtils.isEmpty(idsStr)){
+            List<String> list = Arrays.asList(idsStr.split(","));
+            docService.delete(list);
+        }
         return resp;
     }
 }
