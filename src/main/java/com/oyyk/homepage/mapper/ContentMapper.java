@@ -31,4 +31,6 @@ public interface ContentMapper {
     int updateByPrimaryKeySelective(Content record);
 
     int updateByPrimaryKeyWithBLOBs(Content record);
+
+    int updateByPrimaryKey(Content record);
 }

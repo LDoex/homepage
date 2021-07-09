@@ -82,6 +82,7 @@ drop table if exists `content`;
 create table `content`(
                           `id` bigint not null comment 'id',
                           `content` mediumtext not null comment '内容',
+                          `sort` int comment '顺序',
                           primary key (`id`)
 
 )engine=innodb default charset=utf8mb4 comment='页面内容';

@@ -91,6 +91,7 @@ public class DocService {
 
             //新增内容
             content.setId(doc.getId());
+            content.setSort(doc.getSort());
             contentMapper.insert(content);
         }else{
             //更新

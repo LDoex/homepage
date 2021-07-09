@@ -3,6 +3,7 @@
 <mapper namespace="com.oyyk.homepage.mapper.ContentMapper">
   <resultMap id="BaseResultMap" type="com.oyyk.homepage.domain.Content">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.oyyk.homepage.domain.Content">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
@@ -66,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id
+    id, sort
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -120,14 +121,19 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.oyyk.homepage.domain.Content">
-    insert into content (id, content)
-    values (#{id,jdbcType=BIGINT}, #{content,jdbcType=LONGVARCHAR})
+    insert into content (id, sort, content
+      )
+    values (#{id,jdbcType=BIGINT}, #{sort,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.oyyk.homepage.domain.Content">
     insert into content
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="sort != null">
+        sort,
       </if>
       <if test="content != null">
         content,
@@ -136,6 +142,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=BIGINT},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
       </if>
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
@@ -154,6 +163,9 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
+      <if test="record.sort != null">
+        sort = #{record.sort,jdbcType=INTEGER},
+      </if>
       <if test="record.content != null">
         content = #{record.content,jdbcType=LONGVARCHAR},
       </if>
@@ -165,6 +177,7 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     update content
     set id = #{record.id,jdbcType=BIGINT},
+      sort = #{record.sort,jdbcType=INTEGER},
       content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -172,7 +185,8 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update content
-    set id = #{record.id,jdbcType=BIGINT}
+    set id = #{record.id,jdbcType=BIGINT},
+      sort = #{record.sort,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -180,6 +194,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.oyyk.homepage.domain.Content">
     update content
     <set>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
       <if test="content != null">
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
@@ -188,7 +205,13 @@
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.oyyk.homepage.domain.Content">
     update content
-    set content = #{content,jdbcType=LONGVARCHAR}
+    set sort = #{sort,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.oyyk.homepage.domain.Content">
+    update content
+    set sort = #{sort,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

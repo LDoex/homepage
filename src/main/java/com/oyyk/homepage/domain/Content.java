@@ -3,6 +3,8 @@ package com.oyyk.homepage.domain;
 public class Content {
     private Long id;
 
+    private Integer sort;
+
     private String content;
 
     public Long getId() {
@@ -11,6 +13,14 @@ public class Content {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
     public String getContent() {
@@ -28,6 +38,7 @@ public class Content {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", sort=").append(sort);
         sb.append(", content=").append(content);
         sb.append("]");
         return sb.toString();
