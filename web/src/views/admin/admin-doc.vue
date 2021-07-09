@@ -284,6 +284,21 @@ export default defineComponent({
       }
     };
 
+    /**
+     * 内容查询
+     **/
+    const handleQueryContent = () => {
+      axios.get("/doc/find-content/"+docItem.value.id).then((response) => {
+        const data = response.data;
+
+        if(data.success){
+          editor.txt.html(data.content);
+        } else{
+          message.error(data.message);
+        }
+      });
+    };
+
 
     /**
      * 编辑
@@ -294,6 +309,7 @@ export default defineComponent({
       //清空富文本框
       editor.txt.html("");
       docItem.value = Tool.copy(record);
+      handleQueryContent();
 
       treeSelectData.value = Tool.copy(level1.value);
       setDisable(treeSelectData.value, record.id);
@@ -376,6 +392,9 @@ export default defineComponent({
         class: 'test',
       });
       };
+
+
+
 
 
     onMounted(()=>{
