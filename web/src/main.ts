@@ -6,6 +6,7 @@ import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 import * as Icons from '@ant-design/icons-vue';
 import axios from 'axios';
+import Icon from '@ant-design/icons-vue'
 
 axios.defaults.baseURL = process.env.VUE_APP_SERVER;
 
