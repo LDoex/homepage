@@ -12,7 +12,9 @@
           v-show="!drawHandleVisible"
           :bounds="1000"
           @change="onChange">
-        <a-anchor-link v-for="c in level1" :key="c.id" :href="'#' + c.id" :title="c.name" />
+        <a-anchor-link v-for="c in level1" :key="c.id" :href="'#' + c.id" :title="c.name">
+          <a-divider />
+        </a-anchor-link>
       </a-anchor>
     </a-layout-sider>
 
@@ -202,7 +204,7 @@ export default defineComponent({
 
 <style>
  .ant-anchor-wrapper {
-   margin-left: 15px!important;
+   margin-left: -25px!important;
    padding-left: 6px!important;
    overflow: auto;
    background-color: transparent;
@@ -212,7 +214,7 @@ export default defineComponent({
   padding: 15px!important;
   color: rgba(0, 0, 0, 0.85);
   font-family: "Times New Roman";
-  font-size: 20px!important;
+  font-size: 18px!important;
   font-variant: tabular-nums;
   line-height: 1.5715;
   list-style: none;
@@ -227,7 +229,7 @@ export default defineComponent({
    left: 145px;
    width: 40px;
    height: 40px;
-   background-color: #7b7b7b;
+   background-color: #5e5e5e;
    color: white;
    font-size: 20px;
    text-align: center;

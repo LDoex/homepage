@@ -15,11 +15,6 @@
               </a-button>
             </a-form-item>
             <a-form-item>
-              <a-button type="primary" @click="handleProfileView()">
-                简介编辑
-              </a-button>
-            </a-form-item>
-            <a-form-item>
               <a-button type="primary" @click="add()" >
                 新增类别
               </a-button>
@@ -59,35 +54,43 @@
             </template>
           </a-table>
           <br/>
-          <a-table
-              :columns="otherColumns"
-              :row-key="record => record.id"
-              :data-source="otherList"
-              :loading="otherLoading"
-              :pagination="false"
-              size="small"
-          >
-            <template #otherName="{ text, record }">
-              简介及页脚信息
+          <a-card title="编辑简介及页脚" style="width: 300px">
+            <template #extra>
+              <a-button type="primary" @click="handleProfileView()" size="small">
+                新增
+              </a-button>
             </template>
-            <template v-slot:otherAction="{text, record}">
-              <a-space size="small">
-                <a-button type="primary" @click="otherEdit(record)" size="small">
-                  编辑
-                </a-button>
-                <a-popconfirm
-                    title="确认删除?"
-                    ok-text="是"
-                    cancel-text="否"
-                    @confirm="handleDelete(record.id)"
-                >
-                  <a-button type="danger" size="small">
-                    删除
+            <a-table
+                :columns="otherColumns"
+                :row-key="record => record.id"
+                :data-source="otherList"
+                :loading="otherLoading"
+                :pagination="false"
+                size="small"
+                :show-header="false"
+            >
+              <template #otherName="{ text, record }">
+                已有简历及页脚
+              </template>
+              <template v-slot:otherAction="{text, record}">
+                <a-space size="small">
+                  <a-button type="primary" @click="otherEdit(record)" size="small">
+                    编辑
                   </a-button>
-                </a-popconfirm>
-              </a-space>
-            </template>
-          </a-table>
+                  <a-popconfirm
+                      title="确认删除?"
+                      ok-text="是"
+                      cancel-text="否"
+                      @confirm="handleDelete(record.id)"
+                  >
+                    <a-button type="danger" size="small">
+                      删除
+                    </a-button>
+                  </a-popconfirm>
+                </a-space>
+              </template>
+            </a-table>
+          </a-card>
         </a-col>
 
         <a-col :span="16">
@@ -194,13 +197,11 @@ export default defineComponent({
     ];
     const otherColumns = [
       {
-        title: '名称',
         dataIndex: 'id',
         key: 'id',
         slots: { customRender: 'otherName' },
       },
       {
-        title: '操作',
         key: 'action',
         slots: { customRender: 'otherAction' },
       },
