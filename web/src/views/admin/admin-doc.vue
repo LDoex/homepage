@@ -56,7 +56,7 @@
           <br/>
           <a-card title="编辑简介及页脚" style="width: 300px">
             <template #extra>
-              <a-button type="primary" @click="handleProfileView()" size="small">
+              <a-button type="primary" @click="otherAdd()" size="small">
                 新增
               </a-button>
             </template>
@@ -508,12 +508,10 @@ export default defineComponent({
      * 新增简介
      */
     const otherAdd = () => {
-      isProfile.value = false;
+      isProfile.value = true;
       //清空富文本框
-      editor.txt.html("");
-      docItem.value = {
-        outcateId: route.query.outCateId,
-      };
+      profileEditor.txt.html("");
+      footerEditor.txt.html("");
     }
 
 
@@ -556,6 +554,7 @@ export default defineComponent({
       otherEdit,
       otherItem,
       handleOtherSave,
+      otherAdd,
 
 
     };
