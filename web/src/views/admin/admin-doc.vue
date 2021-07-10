@@ -94,10 +94,11 @@
           <a-form
               layout="vertical"
               v-show="isProfile"
+              :model="otherItem"
           >
             <a-form-item>
-              <a-button type="primary" >
-                编辑新增
+              <a-button @click="handleOtherSave()" type="primary" >
+                保存
               </a-button>
             </a-form-item>
             <a-form-item label="个人简介">
@@ -177,15 +178,6 @@ export default defineComponent({
     editor.config.zIndex = 0;
     editor.config.uploadImgShowBase64 = true;
 
-    //处理简介编辑显示
-    const handleProfileView = () => {
-      isProfile.value = true;
-    }
-    //处理简介编辑显示
-    const handleProfileSave = () => {
-      isProfile.value = false;
-    }
-
     const route = useRoute();
     const columns = [
       {
@@ -237,6 +229,8 @@ export default defineComponent({
 
     const otherList = ref();
     otherList.value = [];
+    const otherItem = ref();
+    otherItem.value = {};
     
     const loading = ref(false);
     const otherLoading = ref(false);
@@ -473,6 +467,30 @@ export default defineComponent({
       };
 
     /**
+     * 保存简介
+     **/
+    const handleOtherSave = () => {
+      otherItem.value.id = route.query.outCateId;
+      otherItem.value.content = profileEditor.txt.html();
+      otherItem.value.footer = footerEditor.txt.html();
+      axios.post("/others/save", otherItem.value).then((response)=>{
+        const data = response.data;
+        if(data.success) {
+
+          message.success("保存成功");
+          //清空
+          profileEditor.txt.html("");
+          footerEditor.txt.html("");
+          otherItem.value = {}
+          //重新加载列表
+          handleOtherQuery();
+        } else{
+          message.error(data.message);
+        }
+      });
+    }
+
+    /**
      * 编辑简介
      * @param record
      */
@@ -483,7 +501,6 @@ export default defineComponent({
       footerEditor.txt.html("");
       docItem.value = Tool.copy(record);
       handleQueryOtherContent();
-
     };
 
     /**
@@ -530,13 +547,14 @@ export default defineComponent({
       handleDelete,
       treeSelectData,
 
-      handleProfileView,
       isProfile,
 
       otherLoading,
       otherColumns,
       otherList,
       otherEdit,
+      otherItem,
+      handleOtherSave,
 
 
     };

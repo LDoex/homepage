@@ -91,8 +91,8 @@ public class OthersService {
             //新增
             others.setId(req.getId());
             othersMapper.insert(others);
-
-
+        } else{
+            othersMapper.updateByPrimaryKeyWithBLOBs(others);
         }
     }
 
