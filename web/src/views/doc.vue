@@ -5,34 +5,42 @@
         style="background: #fff"
         collapsed-width="0"
         breakpoint='xl'
+        :trigger="null"
         @breakpoint="onBreakpoint"
     >
       <a-anchor
+          v-show="!drawHandleVisible"
           :bounds="1000"
-          :wrapper-style="{marginLeft:14}"
           @change="onChange">
         <a-anchor-link v-for="c in level1" :key="c.id" :href="'#' + c.id" :title="c.name" />
       </a-anchor>
     </a-layout-sider>
-    <a-drawer
-        title="Basic Drawer"
-        :placement="placement"
-        :closable="false"
-        :visible="visible"
-        @close="onClose"
-    >
-      <template v-slot:handle>
-        <div v-show="drawHandleVisible" class="handle" @click="visible = !visible">
-          <a-icon :type="visible ? 'close' : 'setting'"></a-icon>
-        </div>
-      </template>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-    </a-drawer>
+
     <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
+      <a-drawer
+          :placement="placement"
+          :closable="false"
+          :visible="visible"
+          :width="150"
+          @close="onClose"
+      >
+        <template v-slot:handle>
+          <div v-show="drawHandleVisible" class="handle" @click="visible = !visible">
+            <a-icon :type="visible ? 'close' : 'setting'"></a-icon>
+          </div>
+        </template>
+        <div style="margin-left: -65px" id="myanchor">
+          <a-anchor
+              :bounds="10"
+              :affix="false"
+              :show-ink-in-fixed="false"
+              @change="onChange">
+            <a-anchor-link v-for="c in level1" :key="c.id" :href="'#' + c.id" :title="c.name" />
+          </a-anchor>
+        </div>
+      </a-drawer>
     <a-row :gutter="24">
 
       <a-col :span="20">
@@ -113,6 +121,7 @@ export default defineComponent({
 
     const visible = ref<boolean>(false);
     const drawHandleVisible = ref(false);
+    const placement = ref<string>('left');
 
     const showDrawer = () => {
       visible.value = true;
@@ -125,6 +134,7 @@ export default defineComponent({
 
     const onBreakpoint = (broken: any) => {
       drawHandleVisible.value = broken;
+      console.log(drawHandleVisible);
     };
 
     onMounted(()=>{
@@ -145,6 +155,7 @@ export default defineComponent({
       onClose,
       onBreakpoint,
       drawHandleVisible,
+      placement,
     };
   },
 });
@@ -152,16 +163,17 @@ export default defineComponent({
 
 <style>
  .ant-anchor-wrapper {
-   margin-left: 14px!important;
-   padding-left: 4px;
+   margin-left: 15px!important;
+   padding-left: 6px!important;
    overflow: auto;
    background-color: transparent;
  }
 .ant-anchor{
-  margin: 0;
-  padding: 0;
+  margin: 15px!important;
+  padding: 15px!important;
   color: rgba(0, 0, 0, 0.85);
-  font-size: 28px;
+  font-family: "Times New Roman";
+  font-size: 20px!important;
   font-variant: tabular-nums;
   line-height: 1.5715;
   list-style: none;
@@ -173,10 +185,10 @@ export default defineComponent({
  .handle {
    position: absolute;
    top: 250px;
-   right: 310px;
+   left: 145px;
    width: 40px;
    height: 40px;
-   background-color: #0000ff;
+   background-color: #7b7b7b;
    color: white;
    font-size: 20px;
    text-align: center;
