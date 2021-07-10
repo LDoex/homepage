@@ -48,7 +48,7 @@
       >
 
         <div>
-          <a-avatar  shape="square" :size="{ xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 }" :src="imageurl"/>
+          <a-avatar  shape="square" :size="{ xs: 80, sm: 80, md: 80, lg: 160, xl: 160, xxl: 160 }" :src="imageurl"/>
         </div>
       </a-col>
 
@@ -242,7 +242,7 @@ export default defineComponent({
 <style scoped>
 .ant-avatar{
   width: 50px;
-  height: 150px!important;
+  height: 100%!important;
   line-height: 50px;
   border-radius: 8%;
   margin: 5px 0;

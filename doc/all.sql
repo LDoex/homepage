@@ -86,3 +86,13 @@ create table `content`(
                           primary key (`id`)
 
 )engine=innodb default charset=utf8mb4 comment='页面内容';
+
+-- 其他内容：包括页脚信息，简介信息
+drop table if exists `others`;
+create table `others`(
+                          `id` bigint not null comment 'id',
+                          `content` mediumtext not null comment '简介信息',
+                          `footer` mediumtext not null comment '页脚信息',
+                          primary key (`id`)
+
+)engine=innodb default charset=utf8mb4 comment='其他内容';

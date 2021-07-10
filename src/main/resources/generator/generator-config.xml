@@ -43,6 +43,7 @@
 <!--        <table tableName="memberInfo"/>-->
 <!--        <table tableName="home_category"/>-->
 <!--        <table tableName="doc"/>-->
-        <table tableName="content"/>
+<!--        <table tableName="content"/>-->
+        <table tableName="others"/>
     </context>
 </generatorConfiguration>
