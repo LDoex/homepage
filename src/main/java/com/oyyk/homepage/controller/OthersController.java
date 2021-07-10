@@ -36,6 +36,13 @@ public class OthersController {
         resp.setContent(list);
         return resp;
     }
+    @RequestMapping("/find-content/{outCateId}")
+    public CommonResp findContent(@PathVariable Long outCateId){
+        CommonResp<List<OthersQueryResp>> resp = new CommonResp<>();
+        List<OthersQueryResp> list = othersService.findContent(outCateId);
+        resp.setContent(list);
+        return resp;
+    }
     @PostMapping("/save")
     public CommonResp save(@Valid @RequestBody OthersSaveReq req){
         CommonResp resp = new CommonResp<>();

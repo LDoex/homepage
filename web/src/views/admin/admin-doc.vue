@@ -57,12 +57,35 @@
                 </a-popconfirm>
               </a-space>
             </template>
-            <template #tags="{ text: category2Id }">
-              <a-tag
-                  :color="category2Id === 'loser' ? 'volcano' : 'green'"
-              >
-                {{ category2Id }}
-              </a-tag>
+          </a-table>
+          <br/>
+          <a-table
+              :columns="columns"
+              :row-key="record => record.id"
+              :data-source="level1"
+              :loading="loading"
+              :pagination="false"
+              size="small"
+          >
+            <template #name="{ text, record }">
+              简介及页脚信息
+            </template>
+            <template v-slot:action="{text, record}">
+              <a-space size="small">
+                <a-button type="primary" @click="edit(record)" size="small">
+                  编辑
+                </a-button>
+                <a-popconfirm
+                    title="确认删除?"
+                    ok-text="是"
+                    cancel-text="否"
+                    @confirm="handleDelete(record.id)"
+                >
+                  <a-button type="danger" size="small">
+                    删除
+                  </a-button>
+                </a-popconfirm>
+              </a-space>
             </template>
           </a-table>
         </a-col>

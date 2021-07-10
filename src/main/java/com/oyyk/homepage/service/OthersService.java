@@ -56,10 +56,25 @@ public class OthersService {
 
         criteria.andIdEqualTo(outCateId);
 
-        othersExample.setOrderByClause("sort asc");
-
 
         List<Others> othersList = othersMapper.selectByExample(othersExample);
+
+
+        List<OthersQueryResp> list = CopyUtil.copyList(othersList, OthersQueryResp.class);
+
+
+        return list;
+
+    }
+    public List<OthersQueryResp> findContent(Long outCateId){
+
+        OthersExample othersExample = new OthersExample();
+        OthersExample.Criteria criteria = othersExample.createCriteria();
+
+        criteria.andIdEqualTo(outCateId);
+
+
+        List<Others> othersList = othersMapper.selectByExampleWithBLOBs(othersExample);
 
 
         List<OthersQueryResp> list = CopyUtil.copyList(othersList, OthersQueryResp.class);
