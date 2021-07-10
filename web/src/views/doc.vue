@@ -48,8 +48,7 @@
       >
 
         <div>
-          sdfsd
-          <img v-if="imageurl" :src="imageurl" alt="avatar" height="80" width="50"/>
+          <a-avatar  shape="square" :size="{ xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 }" :src="imageurl"/>
         </div>
       </a-col>
 
@@ -238,5 +237,15 @@ export default defineComponent({
  .handle:hover {
    cursor: pointer;
  }
+
+</style>
+<style scoped>
+.ant-avatar{
+  width: 50px;
+  height: 150px!important;
+  line-height: 50px;
+  border-radius: 8%;
+  margin: 5px 0;
+}
 </style>
 
