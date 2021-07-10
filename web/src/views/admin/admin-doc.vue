@@ -60,17 +60,17 @@
           </a-table>
           <br/>
           <a-table
-              :columns="columns"
+              :columns="otherColumns"
               :row-key="record => record.id"
-              :data-source="level1"
-              :loading="loading"
+              :data-source="otherList"
+              :loading="otherLoading"
               :pagination="false"
               size="small"
           >
-            <template #name="{ text, record }">
+            <template #otherName="{ text, record }">
               简介及页脚信息
             </template>
-            <template v-slot:action="{text, record}">
+            <template v-slot:otherAction="{text, record}">
               <a-space size="small">
                 <a-button type="primary" @click="edit(record)" size="small">
                   编辑
@@ -92,7 +92,7 @@
 
         <a-col :span="16">
           <a-form
-              layout="inline"
+              layout="vertical"
               v-show="isProfile"
           >
             <a-form-item>
@@ -196,6 +196,19 @@ export default defineComponent({
         slots: { customRender: 'action' },
       },
     ];
+    const otherColumns = [
+      {
+        title: '名称',
+        dataIndex: 'id',
+        key: 'id',
+        slots: { customRender: 'otherName' },
+      },
+      {
+        title: '操作',
+        key: 'action',
+        slots: { customRender: 'otherAction' },
+      },
+    ];
 
     /**
      * 一级分类树，children属性就是二级分类
@@ -217,9 +230,33 @@ export default defineComponent({
     docItem.value = {};
     const docList = ref();
     docList.value = [];
+
+    const otherList = ref();
+    otherList.value = [];
     
     const loading = ref(false);
+    const otherLoading = ref(false);
 
+
+    /**
+     * 查询other数据
+     **/
+    const handleOtherQuery = () => {
+      otherLoading.value = true;
+      //如果不清空现有数据，则编辑保存重新加载数据后，再次编辑，则列表显示的还是编辑前的数据
+      otherList.value = [];
+      axios.get("/others/all/"+route.query.outCateId).then((response)=>{
+        otherLoading.value = false;
+        const data = response.data;
+        if(data.success){
+          otherList.value = data.content;
+          console.log("otherList",otherList.value);
+        } else{
+          message.error(data.message);
+        }
+
+      });
+    };
 
     /**
      * 数据查询 handleQuery相当于一个对象实例
@@ -420,6 +457,7 @@ export default defineComponent({
 
     onMounted(()=>{
       handleQuery();
+      handleOtherQuery();
       editor.create();
       profileEditor.create();
       setTimeout(()=>{
@@ -446,6 +484,10 @@ export default defineComponent({
 
       handleProfileView,
       isProfile,
+
+      otherLoading,
+      otherColumns,
+      otherList,
 
 
     };
