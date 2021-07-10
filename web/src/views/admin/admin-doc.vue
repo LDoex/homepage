@@ -72,7 +72,7 @@
             </template>
             <template v-slot:otherAction="{text, record}">
               <a-space size="small">
-                <a-button type="primary" @click="edit(record)" size="small">
+                <a-button type="primary" @click="otherEdit(record)" size="small">
                   编辑
                 </a-button>
                 <a-popconfirm
@@ -100,8 +100,11 @@
                 编辑新增
               </a-button>
             </a-form-item>
-            <a-form-item>
+            <a-form-item label="个人简介">
               <div id="profileEditor"></div>
+            </a-form-item>
+            <a-form-item label="页脚信息">
+              <div id="footerEditor"></div>
             </a-form-item>
           </a-form>
           <p>
@@ -168,6 +171,7 @@ export default defineComponent({
     const isProfile = ref(false);
     const editor = new E("#contentEditor");
     const profileEditor = new E("#profileEditor");
+    const footerEditor = new E("#footerEditor");
 
     //文本框置底，允许上传图片
     editor.config.zIndex = 0;
@@ -239,7 +243,7 @@ export default defineComponent({
 
 
     /**
-     * 查询other数据
+     * 查询other分类
      **/
     const handleOtherQuery = () => {
       otherLoading.value = true;
@@ -251,6 +255,23 @@ export default defineComponent({
         if(data.success){
           otherList.value = data.content;
           console.log("otherList",otherList.value);
+        } else{
+          message.error(data.message);
+        }
+
+      });
+    };
+    /**
+     * 查询other内容
+     **/
+    const handleQueryOtherContent = () => {
+      otherLoading.value = true;
+      axios.get("/others/find-content/"+route.query.outCateId).then((response)=>{
+        otherLoading.value = false;
+        const data = response.data;
+        if(data.success){
+          profileEditor.txt.html(data.content[0].content);
+          footerEditor.txt.html(data.content[0].footer);
         } else{
           message.error(data.message);
         }
@@ -451,6 +472,32 @@ export default defineComponent({
       });
       };
 
+    /**
+     * 编辑简介
+     * @param record
+     */
+    const otherEdit = (record: any) => {
+      isProfile.value = true;
+      //清空富文本框
+      profileEditor.txt.html("");
+      footerEditor.txt.html("");
+      docItem.value = Tool.copy(record);
+      handleQueryOtherContent();
+
+    };
+
+    /**
+     * 新增简介
+     */
+    const otherAdd = () => {
+      isProfile.value = false;
+      //清空富文本框
+      editor.txt.html("");
+      docItem.value = {
+        outcateId: route.query.outCateId,
+      };
+    }
+
 
 
 
@@ -460,6 +507,7 @@ export default defineComponent({
       handleOtherQuery();
       editor.create();
       profileEditor.create();
+      footerEditor.create();
       setTimeout(()=>{
         add()
       }, 100);
@@ -488,6 +536,7 @@ export default defineComponent({
       otherLoading,
       otherColumns,
       otherList,
+      otherEdit,
 
 
     };
