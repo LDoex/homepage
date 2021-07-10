@@ -11,11 +11,17 @@
       <a-anchor
           v-show="!drawHandleVisible"
           :bounds="1000"
-          @change="onChange">
-        <a-anchor-link v-for="c in level1" :key="c.id" :href="'#' + c.id" :title="c.name">
+          >
+        <a-anchor-link v-for="c in level1" :key="c.id" :href="'#' + c.name" :title="c.name">
           <a-divider />
         </a-anchor-link>
       </a-anchor>
+      <div v-if="!drawHandleVisible" :innerHTML="footer" style="
+      margin-bottom: 30%;
+      float: left;
+      width: 10em;
+      position: fixed;
+"></div>
     </a-layout-sider>
 
     <a-layout-content
@@ -38,32 +44,35 @@
               :bounds="10"
               :affix="false"
               :show-ink-in-fixed="false"
-              @change="onChange">
-            <a-anchor-link v-for="c in level1" :key="c.id" :href="'#' + c.id" :title="c.name" />
+              >
+            <a-anchor-link v-for="c in level1" :key="c.id" :href="'#' + c.name" :title="c.name" />
           </a-anchor>
         </div>
+        <div v-if="drawHandleVisible" :innerHTML="footer" style="
+      width: 10em;
+      margin-left: -50%;
+"></div>
       </a-drawer>
 
-    <a-row :gutter="24">
+    <a-row type="flex" :gutter="24" align="middle">
       <a-col
-          :span="6"
+          :xs="{ span: 2 }" :lg="{ span: 4, offset: 4}"
       >
-
-        <div>
+        <div class="avaterContent">
           <a-avatar  shape="square" :size="{ xs: 80, sm: 80, md: 80, lg: 160, xl: 160, xxl: 160 }" :src="imageurl"/>
         </div>
       </a-col>
 
       <a-col
-          :span="18"
+          :xs="{ span: 18, offset: 4}" :lg="{ span: 10, offset: 0}"
       >
-        <div>sdfsd</div>
+        <div :innerHTML="profile"></div>
       </a-col>
     </a-row>
       <br/>
     <a-row :gutter="24">
         <div class="wangeditor" >
-          <div v-for="c in contents" :key="c.id" :id="c.id" :class="c.id" :innerHTML="c.content"></div>
+          <div v-for="c in contents" :key="c.id" :id="c.name" :class="c.id" :innerHTML="c.content"></div>
         </div>
     </a-row>
       <a-back-top />
@@ -124,6 +133,7 @@ export default defineComponent({
     /**
      * 内容查询
      **/
+    let i: any = 0;
     const ids: Array<string> = [];
     const handleQueryContent = () => {
 
@@ -132,6 +142,12 @@ export default defineComponent({
         const data = response.data;
         if(data.success){
           contents.value = data.content;
+
+          i = 0;
+          for (let contentsKey in contents.value) {
+            contents.value[contentsKey].name = docList.value[i].name;
+            i+=1;
+          }
         } else{
           message.error(data.message);
         }
@@ -177,10 +193,28 @@ export default defineComponent({
         }
 
       });
-    }
+    };
 
+    /**
+     * 查询other内容
+     **/
+    const profile = ref();
+    const footer = ref();
+    const handleQueryOtherContent = () => {
+      axios.get("/others/find-content/"+route.query.meminfoId).then((response)=>{
+        const data = response.data;
+        if(data.success){
+          profile.value = data.content[0].content;
+          footer.value = data.content[0].footer;
+        } else{
+          message.error(data.message);
+        }
+
+      });
+    };
     onMounted(()=>{
       handleQuery();
+      handleQueryOtherContent();
     });
 
     return {
@@ -197,6 +231,9 @@ export default defineComponent({
       placement,
 
       imageurl,
+
+      profile,
+      footer,
     };
   },
 });
@@ -205,7 +242,7 @@ export default defineComponent({
 <style>
  .ant-anchor-wrapper {
    margin-left: -25px!important;
-   padding-left: 6px!important;
+   padding-left: 26px!important;
    overflow: auto;
    background-color: transparent;
  }
@@ -248,6 +285,10 @@ export default defineComponent({
   line-height: 50px;
   border-radius: 8%;
   margin: 5px 0;
+  vertical-align: middle!important;
+}
+.avaterContent{
+  vertical-align: middle;
 }
 </style>
 
