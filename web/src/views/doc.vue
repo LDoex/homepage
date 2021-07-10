@@ -41,13 +41,29 @@
           </a-anchor>
         </div>
       </a-drawer>
-    <a-row :gutter="24">
 
-      <a-col :span="20">
+    <a-row :gutter="24">
+      <a-col
+          :span="6"
+      >
+
+        <div>
+          sdfsd
+          <img v-if="imageurl" :src="imageurl" alt="avatar" height="80" width="50"/>
+        </div>
+      </a-col>
+
+      <a-col
+          :span="18"
+      >
+        <div>sdfsd</div>
+      </a-col>
+    </a-row>
+      <br/>
+    <a-row :gutter="24">
         <div class="wangeditor" >
           <div v-for="c in contents" :key="c.id" :id="c.id" :class="c.id" :innerHTML="c.content"></div>
         </div>
-      </a-col>
     </a-row>
       <a-back-top />
     </a-layout-content>
@@ -94,6 +110,8 @@ export default defineComponent({
             // console.log("id:",docListKey);
             ids.push(docList.value[docListKey].id);
           }
+          handleQueryImage();
+          handleQueryContent();
 
         } else{
           message.error(data.message);
@@ -137,11 +155,31 @@ export default defineComponent({
       console.log(drawHandleVisible);
     };
 
+    /**
+     * 数据查询 handleQuery相当于一个对象实例
+     **/
+    const imageurl = ref("");
+    const handleQueryImage = () => {
+      axios.get("/memberinfo/list", {
+        params: {
+          page: 1,
+          size: 500,
+          id: docList.value[0].outcateId,
+        }
+      }).then((response)=>{
+        const data = response.data;
+        if(data.success){
+          imageurl.value = data.content.list[0].cover;
+          console.log(imageurl.value);
+        } else{
+          message.error(data.message);
+        }
+
+      });
+    }
+
     onMounted(()=>{
       handleQuery();
-      setTimeout(() => {
-        handleQueryContent();
-      }, 100);
     });
 
     return {
@@ -156,6 +194,8 @@ export default defineComponent({
       onBreakpoint,
       drawHandleVisible,
       placement,
+
+      imageurl,
     };
   },
 });

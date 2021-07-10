@@ -40,6 +40,9 @@ public class MemberinfoService {
         if(!ObjectUtils.isEmpty(req.getCategory2Id())) {
             criteria.andCategory2IdEqualTo(req.getCategory2Id());
         }
+        if(!ObjectUtils.isEmpty(req.getId())){
+            criteria.andIdEqualTo(req.getId());
+        }
 
         PageHelper.startPage(req.getPage(), req.getSize());
         List<Memberinfo> memberinfoList = memberinfoMapper.selectByExample(memberinfoExample);
