@@ -1,12 +1,19 @@
 package com.oyyk.homepage.req;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+
 public class UserSaveReq {
     private Long id;
 
+    @NotEmpty(message = "用户名不能为空")
     private String loginName;
 
+    @NotEmpty(message = "姓名不能为空")
     private String name;
 
+    @NotEmpty(message = "密码不能为空")
+    @Pattern(regexp = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,32}$", message = "密码至少包含 数字和英文，长度6-32")
     private String password;
 
     public Long getId() {
