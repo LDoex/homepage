@@ -70,9 +70,7 @@
     </a-row>
       <br/>
     <a-row :gutter="24">
-        <div class="wangeditor" >
-          <div v-for="c in contents" :key="c.id" :id="c.id" :class="c.id" :innerHTML="c.content"></div>
-        </div>
+        <div class="wangeditor" v-for="c in contents" :key="c.id" :id="c.id" :innerHTML="c.content"></div>
     </a-row>
       <a-back-top />
     </a-layout-content>
@@ -324,10 +322,9 @@ export default defineComponent({
    margin: 10px 0 10px 20px;
  }
 
- /* 和antdv p冲突，覆盖掉 */
- .wangeditor blockquote p {
-   font-family:"YouYuan";
-   margin: 20px 10px !important;
+ /* 和antdv p,h1,h2,h3冲突，覆盖掉 */
+ .wangeditor blockquote p, h1, h2, h3 {
+   margin: 20px 20px !important;
    font-size: 16px !important;
    font-weight:600;
  }
