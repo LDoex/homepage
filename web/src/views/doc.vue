@@ -69,8 +69,17 @@
       </a-col>
     </a-row>
       <br/>
-    <a-row :gutter="24">
-        <div class="wangeditor" v-for="c in contents" :key="c.id" :id="c.id" :innerHTML="c.content"></div>
+    <a-row>
+      <a-form
+          layout="vertical"
+          :model="contents"
+      >
+        <a-form-item v-for="c in contents" :key="c.id" :id="c.id">
+          <div :key="c.id" :id="c.id">{{c.name}}</div>
+          <a-divider/>
+          <div class="wangeditor" :key="c.id" :innerHTML="c.content"></div>
+        </a-form-item>
+      </a-form>
     </a-row>
       <a-back-top />
     </a-layout-content>
@@ -325,7 +334,6 @@ export default defineComponent({
  /* 和antdv p,h1,h2,h3冲突，覆盖掉 */
  .wangeditor blockquote p, h1, h2, h3 {
    margin: 20px 20px !important;
-   font-size: 16px !important;
    font-weight:600;
  }
 
