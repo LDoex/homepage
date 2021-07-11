@@ -315,6 +315,7 @@ export default defineComponent({
     const modalLoading = ref(false);
     const handleSave = () => {
       modalLoading.value = true;
+      docItem.value.outcateId = route.query.outCateId;
       docItem.value.content = editor.txt.html();
       axios.post("/doc/save", docItem.value).then((response)=>{
         modalLoading.value = false;
@@ -530,9 +531,6 @@ export default defineComponent({
       editor.create();
       profileEditor.create();
       footerEditor.create();
-      setTimeout(()=>{
-        add()
-      }, 100);
     });
 
     return {
