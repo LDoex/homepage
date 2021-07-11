@@ -1,5 +1,5 @@
 <template>
-  <a-layout-footer style="text-align: center">
+  <a-layout-footer style="text-align: center; z-index: 999;">
     Wiki
   </a-layout-footer>
 </template>

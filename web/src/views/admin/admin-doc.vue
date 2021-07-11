@@ -181,6 +181,9 @@ export default defineComponent({
     editor.config.zIndex = 0;
     editor.config.uploadImgShowBase64 = true;
 
+    const treeSelectData = ref();
+    treeSelectData.value = [];
+
     const route = useRoute();
     const columns = [
       {
@@ -290,6 +293,10 @@ export default defineComponent({
           level1.value = Tool.array2Tree(docList.value, 0);
           console.log("树形数组", level1.value);
 
+          treeSelectData.value = Tool.copy(level1.value);
+          //为树选择添加一个”无“
+          treeSelectData.value.unshift({id: 0, name: '无'});
+
         } else{
           message.error(data.message);
         }
@@ -329,8 +336,7 @@ export default defineComponent({
     /**
      * 递归将某节点及其子孙节点全部置为disabled
      * */
-    const treeSelectData = ref();
-    treeSelectData.value = [];
+
     const setDisable = (treeSelectData: any, id: any) => {
       //console.log("treeSelecData结构：",treeSelectData, id);
       for(let i = 0; i<treeSelectData.length; i++){

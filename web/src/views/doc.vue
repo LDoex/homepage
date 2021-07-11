@@ -12,7 +12,7 @@
           v-show="!drawHandleVisible"
           :bounds="1000"
           >
-        <a-anchor-link v-for="c in level1" :key="c.id" :href="'#' + c.name" :title="c.name">
+        <a-anchor-link v-for="c in level1" :key="c.id" :href="'#' + c.id" :title="c.name">
           <a-divider />
         </a-anchor-link>
       </a-anchor>
@@ -20,7 +20,6 @@
       margin-bottom: 30%;
       float: left;
       width: 10em;
-      position: fixed;
 "></div>
     </a-layout-sider>
 
@@ -45,7 +44,7 @@
               :affix="false"
               :show-ink-in-fixed="false"
               >
-            <a-anchor-link v-for="c in level1" :key="c.id" :href="'#' + c.name" :title="c.name" />
+            <a-anchor-link v-for="c in level1" :key="c.id" :href="'#' + c.id" :title="c.name" />
           </a-anchor>
         </div>
         <div v-if="drawHandleVisible" :innerHTML="footer" style="
@@ -66,13 +65,13 @@
       <a-col
           :xs="{ span: 18, offset: 4}" :lg="{ span: 10, offset: 0}"
       >
-        <div :innerHTML="profile"></div>
+        <div :innerHTML="profile" id="Home"></div>
       </a-col>
     </a-row>
       <br/>
     <a-row :gutter="24">
         <div class="wangeditor" >
-          <div v-for="c in contents" :key="c.id" :id="c.name" :class="c.id" :innerHTML="c.content"></div>
+          <div v-for="c in contents" :key="c.id" :id="c.id" :class="c.id" :innerHTML="c.content"></div>
         </div>
     </a-row>
       <a-back-top />
@@ -244,7 +243,8 @@ export default defineComponent({
    margin-left: -25px!important;
    padding-left: 26px!important;
    overflow: auto;
-   background-color: transparent;
+   /*background-color: transparent;*/
+   background-color: white!important;
  }
 .ant-anchor{
   margin: 15px!important;
@@ -286,9 +286,6 @@ export default defineComponent({
   border-radius: 8%;
   margin: 5px 0;
   vertical-align: middle!important;
-}
-.avaterContent{
-  vertical-align: middle;
 }
 </style>
 
