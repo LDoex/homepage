@@ -77,6 +77,7 @@ public class UserService {
             //更新
             //防止数据库登录名被篡改，先置空
             user.setLoginName(null);
+            user.setPassword(null);
             userMapper.updateByPrimaryKeySelective(user);
         }
     }

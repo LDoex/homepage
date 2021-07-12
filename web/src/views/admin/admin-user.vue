@@ -35,7 +35,7 @@
         <template v-slot:action="{text, record}">
           <a-space size="small">
             <a-button type="primary" @click="edit(record)">
-              重置
+              编辑姓名
             </a-button>
             <a-popconfirm
                 title="确认删除?"
@@ -54,7 +54,7 @@
   </a-layout>
 
   <a-modal
-      title="重置"
+      title="编辑姓名"
       v-model:visible="modalVisible"
       :confirm-loading="modalLoading"
       @ok="handleModalOk"
@@ -68,8 +68,8 @@
       <a-form-item label="姓名">
         <a-input v-model:value="userItem.name" />
       </a-form-item>
-      <a-form-item label="密码">
-        <a-input-password v-model:value="userItem.password" />
+      <a-form-item label="密码" v-show="!userItem.id">
+        <a-input-password v-model:value="userItem.password"/>
       </a-form-item>
     </a-form>
   </a-modal>
