@@ -1,10 +1,12 @@
 package com.oyyk.homepage.controller;
 
+import com.oyyk.homepage.req.UserLoginReq;
 import com.oyyk.homepage.req.UserQueryReq;
 import com.oyyk.homepage.req.UserResetPasswordReq;
 import com.oyyk.homepage.req.UserSaveReq;
 import com.oyyk.homepage.resp.CommonResp;
 import com.oyyk.homepage.resp.PageResp;
+import com.oyyk.homepage.resp.UserLoginResp;
 import com.oyyk.homepage.resp.UserQueryResp;
 import com.oyyk.homepage.service.UserService;
 import org.springframework.util.DigestUtils;
@@ -47,6 +49,14 @@ public class UserController {
         req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
         CommonResp resp = new CommonResp<>();
         userService.resetPassword(req);
+        return resp;
+    }
+    @PostMapping("/login")
+    public CommonResp login(@Valid @RequestBody UserLoginReq req){
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+        CommonResp<UserLoginResp> resp = new CommonResp<>();
+        UserLoginResp userLoginResp = userService.login(req);
+        resp.setContent(userLoginResp);
         return resp;
     }
 }

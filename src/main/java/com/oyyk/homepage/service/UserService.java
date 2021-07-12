@@ -7,10 +7,12 @@ import com.oyyk.homepage.domain.UserExample;
 import com.oyyk.homepage.exception.BusinessException;
 import com.oyyk.homepage.exception.BusinessExceptionCode;
 import com.oyyk.homepage.mapper.UserMapper;
+import com.oyyk.homepage.req.UserLoginReq;
 import com.oyyk.homepage.req.UserQueryReq;
 import com.oyyk.homepage.req.UserResetPasswordReq;
 import com.oyyk.homepage.req.UserSaveReq;
 import com.oyyk.homepage.resp.PageResp;
+import com.oyyk.homepage.resp.UserLoginResp;
 import com.oyyk.homepage.resp.UserQueryResp;
 import com.oyyk.homepage.util.CopyUtil;
 import com.oyyk.homepage.util.SnowFlake;
@@ -33,12 +35,12 @@ public class UserService {
     @Resource
     private SnowFlake snowFlake;
 
-    public PageResp<UserQueryResp> list(UserQueryReq req){
+    public PageResp<UserQueryResp> list(UserQueryReq req) {
 
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
 
-        if(!ObjectUtils.isEmpty(req.getLoginName())){
+        if (!ObjectUtils.isEmpty(req.getLoginName())) {
             criteria.andLoginNameEqualTo(req.getLoginName());
         }
 
@@ -61,17 +63,17 @@ public class UserService {
     }
 
     //修改密码
-    public void resetPassword(UserResetPasswordReq req){
+    public void resetPassword(UserResetPasswordReq req) {
         User user = CopyUtil.copy(req, User.class);
         userMapper.updateByPrimaryKeySelective(user);
     }
 
     //保存
-    public void save(UserSaveReq req){
+    public void save(UserSaveReq req) {
         User user = CopyUtil.copy(req, User.class);
-        if(ObjectUtils.isEmpty(req.getId())){
+        if (ObjectUtils.isEmpty(req.getId())) {
             User userDB = selectByLoginName(req.getLoginName());
-            if(ObjectUtils.isEmpty(userDB)){
+            if (ObjectUtils.isEmpty(userDB)) {
                 //新增
                 user.setId(snowFlake.nextId());
                 userMapper.insert(user);
@@ -80,7 +82,7 @@ public class UserService {
                 throw new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_EXIST);
             }
 
-        }else{
+        } else {
             //更新
             //防止数据库登录名被篡改，先置空
             user.setLoginName(null);
@@ -89,20 +91,40 @@ public class UserService {
         }
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         userMapper.deleteByPrimaryKey(id);
     }
 
-    public User selectByLoginName(String LoginName){
+    public User selectByLoginName(String LoginName) {
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
         criteria.andLoginNameEqualTo(LoginName);
         List<User> userList = userMapper.selectByExample(userExample);
 
-        if(CollectionUtils.isEmpty(userList)) {
+        if (CollectionUtils.isEmpty(userList)) {
             return null;
-        } else{
+        } else {
             return userList.get(0);
+        }
+    }
+
+    //登录
+    public UserLoginResp login(UserLoginReq req) {
+        User userDb = selectByLoginName(req.getLoginName());
+        if (ObjectUtils.isEmpty(userDb)) {
+            // 用户名不存在
+            LOG.info("用户名不存在, {}", req.getLoginName());
+            throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
+        } else {
+            if (userDb.getPassword().equals(req.getPassword())) {
+                // 登录成功
+                UserLoginResp userLoginResp = CopyUtil.copy(userDb, UserLoginResp.class);
+                return userLoginResp;
+            } else {
+                // 密码不对
+                LOG.info("密码不对, 输入密码：{}, 数据库密码：{}", req.getPassword(), userDb.getPassword());
+                throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
+            }
         }
     }
 }
