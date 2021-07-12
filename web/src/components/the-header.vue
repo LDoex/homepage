@@ -18,7 +18,17 @@
       <a-menu-item key="/admin/homeCategory">
         <router-link to="/admin/homeCategory">主页分类管理</router-link>
       </a-menu-item>
-      <a class="login-menu" v-show="user.id">
+      <a-popconfirm
+          title="确认退出登录?"
+          ok-text="是"
+          cancel-text="否"
+          @confirm="logout()"
+      >
+        <a class="logout-menu" v-show="user.id">
+          <span>退出登录</span>
+        </a>
+      </a-popconfirm>
+      <a class="welcome-menu" v-show="user.id">
         <span>欢迎{{user.name}}</span>
       </a>
       <a class="login-menu" @click="showLoginModal" v-show="!user.id">
@@ -43,7 +53,6 @@
             <template #prefix><LockOutlined style="color: rgba(0, 0, 0, 0.25)" /></template>
           </a-input-password>
         </a-form-item>
-
       </a-form>
     </a-modal>
   </a-layout-header>
@@ -91,7 +100,22 @@ export default defineComponent({
         if(data.success){
           loginModalVisible.value = false;
           message.success('登录成功');
-          store.commit("setUser", user.value);
+          store.commit("setUser", data.content);
+        } else{
+          message.error(data.message);
+        }
+      });
+    };
+
+    //退出登录
+    const logout = () => {
+      console.log("退出登录开始");
+      axios.get("/user/logout/"+user.value.token).then((response) => {
+        const data = response.data;
+        if(data.success){
+          message.success('退出登录成功');
+          // user.value = data.content;
+          store.commit("setUser", {});
         } else{
           message.error(data.message);
         }
@@ -119,6 +143,7 @@ export default defineComponent({
       login,
       loginUser,
       user,
+      logout,
     }
   }
 });
@@ -129,5 +154,18 @@ export default defineComponent({
   color: white;
   position: fixed;
   right: 2rem;
+  padding-left: 10px;
+}
+.logout-menu{
+  color: white;
+  position: fixed;
+  right: 2rem;
+  padding-left: 10px!important;
+}
+.welcome-menu{
+  color: white;
+  position: fixed;
+  right: 4rem;
+  padding-right: 2rem;
 }
 </style>
