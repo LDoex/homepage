@@ -18,7 +18,10 @@
       <a-menu-item key="/admin/homeCategory">
         <router-link to="/admin/homeCategory">主页分类管理</router-link>
       </a-menu-item>
-      <a class="login-menu" @click="showLoginModal">
+      <a class="login-menu" v-show="user.id">
+        <span>欢迎{{user.name}}</span>
+      </a>
+      <a class="login-menu" @click="showLoginModal" v-show="!user.id">
         <span>登录</span>
       </a>
     </a-menu>
@@ -60,9 +63,15 @@ declare let KEY: any;
 export default defineComponent({
   name: 'the-header',
   setup(){
+    //登录后保存
+    const user = ref();
+    user.value = {};
+    let userName:any;
+
+    //用来登录
     const loginUser = ref({
-      loginName: "test",
-      password: "test"
+      loginName: "ts",
+      password: "test123"
     });
 
     const loginModalVisible = ref(false);
@@ -70,8 +79,6 @@ export default defineComponent({
 
     const showLoginModal = () => {
       loginModalVisible.value = true;
-      loginUser.value.loginName = "";
-      loginUser.value.password = "";
     };
 
     //登录
@@ -85,6 +92,9 @@ export default defineComponent({
         if(data.success){
           loginModalVisible.value = false;
           message.success('登录成功');
+          user.value = data.content;
+          userName = data.content.name;
+          console.log("username", userName);
         } else{
           message.error(data.message);
         }
@@ -111,6 +121,8 @@ export default defineComponent({
       showLoginModal,
       login,
       loginUser,
+      user,
+      userName,
     }
   }
 });
