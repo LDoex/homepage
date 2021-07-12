@@ -75,7 +75,9 @@ public class UserService {
 
         }else{
             //更新
-            userMapper.updateByPrimaryKey(user);
+            //防止数据库登录名被篡改，先置空
+            user.setLoginName(null);
+            userMapper.updateByPrimaryKeySelective(user);
         }
     }
 
