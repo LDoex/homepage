@@ -55,6 +55,7 @@ import validate = WebAssembly.validate;
 import _default from "ant-design-vue/es/color-picker";
 import axios from "axios";
 import {message} from "ant-design-vue";
+import store from "@/store";
 
 declare let hexMd5: any;
 declare let KEY: any;
@@ -66,7 +67,6 @@ export default defineComponent({
     //登录后保存
     const user = ref();
     user.value = {};
-    let userName:any;
 
     //用来登录
     const loginUser = ref({
@@ -93,8 +93,7 @@ export default defineComponent({
           loginModalVisible.value = false;
           message.success('登录成功');
           user.value = data.content;
-          userName = data.content.name;
-          console.log("username", userName);
+          store.commit("setUser", user.value);
         } else{
           message.error(data.message);
         }
@@ -122,7 +121,6 @@ export default defineComponent({
       login,
       loginUser,
       user,
-      userName,
     }
   }
 });
