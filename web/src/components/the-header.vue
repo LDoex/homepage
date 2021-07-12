@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, ref} from 'vue';
+import {computed, defineComponent, ref} from 'vue';
 import validate = WebAssembly.validate;
 import _default from "ant-design-vue/es/color-picker";
 import axios from "axios";
@@ -65,8 +65,7 @@ export default defineComponent({
   name: 'the-header',
   setup(){
     //登录后保存
-    const user = ref();
-    user.value = {};
+    const user = computed(() => {return store.state.user;});
 
     //用来登录
     const loginUser = ref({
@@ -92,7 +91,6 @@ export default defineComponent({
         if(data.success){
           loginModalVisible.value = false;
           message.success('登录成功');
-          user.value = data.content;
           store.commit("setUser", user.value);
         } else{
           message.error(data.message);
