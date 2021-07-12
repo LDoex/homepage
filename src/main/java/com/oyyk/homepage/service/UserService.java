@@ -8,9 +8,10 @@ import com.oyyk.homepage.exception.BusinessException;
 import com.oyyk.homepage.exception.BusinessExceptionCode;
 import com.oyyk.homepage.mapper.UserMapper;
 import com.oyyk.homepage.req.UserQueryReq;
+import com.oyyk.homepage.req.UserResetPasswordReq;
 import com.oyyk.homepage.req.UserSaveReq;
-import com.oyyk.homepage.resp.UserQueryResp;
 import com.oyyk.homepage.resp.PageResp;
+import com.oyyk.homepage.resp.UserQueryResp;
 import com.oyyk.homepage.util.CopyUtil;
 import com.oyyk.homepage.util.SnowFlake;
 import org.slf4j.Logger;
@@ -57,6 +58,12 @@ public class UserService {
 
         return pageResp;
 
+    }
+
+    //修改密码
+    public void resetPassword(UserResetPasswordReq req){
+        User user = CopyUtil.copy(req, User.class);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
     //保存
