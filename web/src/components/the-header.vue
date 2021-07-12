@@ -6,16 +6,13 @@
         mode="horizontal"
         :style="{ lineHeight: '64px' }"
     >
-      <a-menu-item key="/">
-        <router-link to="/">首页</router-link>
-      </a-menu-item>
-      <a-menu-item key="/admin/user">
+      <a-menu-item key="/admin/user" :style="user.id?{}:{display:'none'}">
         <router-link to="/admin/user">用户管理</router-link>
       </a-menu-item>
-      <a-menu-item key="/admin/memberinfo">
-        <router-link to="/admin/memberinfo">团队人员管理</router-link>
+      <a-menu-item key="/admin/memberinfo" :style="user.id?{}:{display:'none'}">
+        <router-link to="/admin/memberinfo" :style="user.id?{}:{display:'none'}">团队人员管理</router-link>
       </a-menu-item>
-      <a-menu-item key="/admin/homeCategory">
+      <a-menu-item key="/admin/homeCategory" :style="user.id?{}:{display:'none'}">
         <router-link to="/admin/homeCategory">主页分类管理</router-link>
       </a-menu-item>
       <a-popconfirm
@@ -29,10 +26,13 @@
         </a>
       </a-popconfirm>
       <a class="welcome-menu" v-show="user.id">
-        <span>欢迎{{user.name}}</span>
+        <span>欢迎管理员{{user.name}}</span>
       </a>
       <a class="login-menu" @click="showLoginModal" v-show="!user.id">
         <span>登录</span>
+      </a>
+      <a class="return-menu" v-show="!user.id">
+        <router-link to="/" class="return-menu">返回首页</router-link>
       </a>
     </a-menu>
 
@@ -155,6 +155,12 @@ export default defineComponent({
   position: fixed;
   right: 2rem;
   padding-left: 10px;
+}
+.return-menu{
+  color: white;
+  position: fixed;
+  right: 4rem;
+  padding-right: 0.5rem;
 }
 .logout-menu{
   color: white;

@@ -19,7 +19,7 @@ name=memberinfo2
 
 ###
 
-GET http://localhost:8880/doc/find-content/68609776132689920
+POST http://localhost:8880/memberinfo/save
 Accept: application/json
 
 ###
