@@ -61,7 +61,7 @@
       okText="确认"
       cancelText="取消"
   >
-    <a-form :model="userItem">
+    <a-form :model="userItem" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
       <a-form-item label="登录名">
         <a-input v-model:value="userItem.loginName" />
       </a-form-item>
