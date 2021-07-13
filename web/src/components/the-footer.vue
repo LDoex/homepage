@@ -1,6 +1,6 @@
 <template>
   <a-layout-footer style="text-align: center;">
-    Wiki {{user.name}}
+    Address: No. 24, 1st South Section, Yihuan Road, Wuhou District, Chengdu, Sichuan Province, P.R. China 610065 {{user.name}}
   </a-layout-footer>
 </template>
 

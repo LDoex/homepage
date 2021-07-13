@@ -75,7 +75,7 @@
           :model="contents"
       >
         <a-form-item v-for="c in contents" :key="c.id" :id="c.id">
-          <div :key="c.id" :id="c.id">{{c.name}}</div>
+          <div :key="c.id" :id="c.id" style="font-size: x-large">{{c.name}}</div>
           <a-divider/>
           <div class="wangeditor" :key="c.id" :innerHTML="c.content"></div>
         </a-form-item>
