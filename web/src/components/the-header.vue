@@ -1,40 +1,59 @@
 <template>
   <a-layout-header class="header">
-    <div class="logo" />
-    <a-menu
-        theme="dark"
-        mode="horizontal"
-        :style="{ lineHeight: '64px' }"
-    >
-      <a-menu-item key="/admin/user" :style="user.id?{}:{display:'none'}">
-        <router-link to="/admin/user">用户管理</router-link>
-      </a-menu-item>
-      <a-menu-item key="/admin/memberinfo" :style="user.id?{}:{display:'none'}">
-        <router-link to="/admin/memberinfo" :style="user.id?{}:{display:'none'}">团队人员管理</router-link>
-      </a-menu-item>
-      <a-menu-item key="/admin/homeCategory" :style="user.id?{}:{display:'none'}">
-        <router-link to="/admin/homeCategory">主页分类管理</router-link>
-      </a-menu-item>
-      <a-popconfirm
-          title="确认退出登录?"
-          ok-text="是"
-          cancel-text="否"
-          @confirm="logout()"
-      >
-        <a class="logout-menu" v-show="user.id">
-          <span>退出登录</span>
+    <a-row type="flex" justify="space-between">
+      <a-col :xs="{span:20}" :sm="4" :md="6" :lg="8" :xl="4">
+        <div class="college">
+          <router-link to="/" style="color: #FFFFFF">
+            <a-avatar  shape="square" :size="{ xs: 80, sm: 80, md: 80, lg: 160, xl: 160, xxl: 160 }" src="/image/footer-logo.png"/>
+            <a-divider type="vertical" style="height: 3rem; background-color: #FFFFFF" />
+            <span>网络空间安全学院</span>
+          </router-link>
+<!--          <img src="/image/footer-logo.png" width="120">-->
+        </div>
+      </a-col>
+      <a-col :xs="0" :sm="4" :md="6" :lg="8" :xl="6">
+        <a-menu
+            theme="dark"
+            mode="horizontal"
+            :style="{ lineHeight: '64px' }"
+        >
+          <a-menu-item key="/admin/user" :style="user.id?{}:{display:'none'}">
+            <router-link to="/admin/user">用户管理</router-link>
+          </a-menu-item>
+          <a-menu-item key="/admin/memberinfo" :style="user.id?{}:{display:'none'}">
+            <router-link to="/admin/memberinfo" :style="user.id?{}:{display:'none'}">团队人员管理</router-link>
+          </a-menu-item>
+          <a-menu-item key="/admin/homeCategory" :style="user.id?{}:{display:'none'}">
+            <router-link to="/admin/homeCategory">主页分类管理</router-link>
+          </a-menu-item>
+        </a-menu>
+      </a-col>
+      <a-col :xs="{span: 16, offset: 6}" :sm="4" :md="6" :lg="8" :xl="6">
+        <a-popconfirm
+            title="确认退出登录?"
+            ok-text="是"
+            cancel-text="否"
+            @confirm="logout()"
+        >
+          <a class="logout-menu" v-show="user.id">
+            <span>退出登录</span>
+          </a>
+        </a-popconfirm>
+
+        <a class="welcome-menu" v-show="user.id">
+          <span>欢迎管理员{{user.name}}</span>
         </a>
-      </a-popconfirm>
-      <a class="welcome-menu" v-show="user.id">
-        <span>欢迎管理员{{user.name}}</span>
-      </a>
-      <a class="login-menu" @click="showLoginModal" v-show="!user.id">
-        <span>登录</span>
-      </a>
-      <a class="return-menu" v-show="!user.id">
-        <router-link to="/" class="return-menu">返回首页</router-link>
-      </a>
-    </a-menu>
+
+        <a class="login-menu" @click="showLoginModal" v-show="!user.id">
+          <span>登录</span>
+        </a>
+<!--        <a class="return-menu" v-show="!user.id">-->
+<!--          <router-link to="/" class="return-menu">返回首页</router-link>-->
+<!--        </a>-->
+
+      </a-col>
+    </a-row>
+
 
     <a-modal
         v-model:visible="loginModalVisible"
@@ -152,26 +171,34 @@ export default defineComponent({
 <style scoped>
 .login-menu{
   color: white;
-  position: fixed;
-  right: 2rem;
-  padding-left: 10px;
+  float: right;
+  padding-left: 0.5rem;
 }
 .return-menu{
   color: white;
-  position: fixed;
-  right: 4rem;
-  padding-right: 0.5rem;
+  float: right;
 }
 .logout-menu{
   color: white;
-  position: fixed;
-  right: 2rem;
-  padding-left: 10px!important;
+  float: right;
+  padding-left: 0.5rem!important;
 }
 .welcome-menu{
   color: white;
-  position: fixed;
-  right: 4rem;
-  padding-right: 2rem;
+  float: right;
+}
+.college{
+  color: #ffffff;
+}
+</style>
+
+<style scoped>
+.ant-avatar{
+  width: 50px;
+  height: 100%!important;
+  line-height: 50px;
+  border-radius: 8%;
+  margin: 5px 0;
+  vertical-align: middle!important;
 }
 </style>
