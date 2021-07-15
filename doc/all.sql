@@ -38,7 +38,7 @@ insert into `memberInfo` (id, email, name, description) values (3, '745661616@qq
 
 # 主页分类
 drop table if exists home_category;
-create table `category` (
+create table `home_category` (
                             `id` bigint not null comment 'id',
                             `parent` bigint not null default 0 comment '父id',
                             `name` varchar(50) not null comment '名称',
@@ -108,4 +108,4 @@ create table `user` (
                         unique key `login_name_unique` (`login_name`)
 ) engine=innodb default charset=utf8mb4 comment='用户';
 
-insert into `user` (id, `login_name`, `name`, `password`) values (1, 'test', '测试', 'e70e2222a9d67c4f2eae107533359aa4');
+insert into `user` (id, `login_name`, `name`, `password`) values (1, 'test', '测试', '7354a1d413535a6c0dc5c209e198d799');
