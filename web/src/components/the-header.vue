@@ -1,21 +1,19 @@
 <template>
-  <a-layout-header class="header">
+  <a-layout-header class="header" style="height: 6rem">
     <a-row type="flex" justify="space-between">
-      <a-col :xs="{span:20}" :sm="4" :md="6" :lg="8" :xl="4">
+      <a-col :xs="{span:20}" :sm="4" :md="6" :lg="8" :xl="6">
         <div class="college">
           <router-link to="/" style="color: #FFFFFF">
-            <a-avatar  shape="square" :size="{ xs: 80, sm: 80, md: 80, lg: 160, xl: 160, xxl: 160 }" src="/image/footer-logo.png"/>
-            <a-divider type="vertical" style="height: 3rem; background-color: #FFFFFF" />
-            <span>网络空间安全学院</span>
+            <a-avatar  shape="square" :size="{ xs: 280, sm: 80, md: 80, lg: 460, xl: 460, xxl: 460 }" src="/image/footer-logo.png"/>
           </router-link>
 <!--          <img src="/image/footer-logo.png" width="120">-->
         </div>
       </a-col>
-      <a-col :xs="0" :sm="4" :md="6" :lg="8" :xl="6">
+      <a-col :xs="0" :sm="4" :md="6" :lg="8" :xl="5">
         <a-menu
             theme="dark"
             mode="horizontal"
-            :style="{ lineHeight: '64px' }"
+            :style="{ lineHeight: '6rem' }"
         >
           <a-menu-item key="/admin/user" :style="user.id?{}:{display:'none'}">
             <router-link to="/admin/user">用户管理</router-link>
@@ -28,7 +26,7 @@
           </a-menu-item>
         </a-menu>
       </a-col>
-      <a-col :xs="{span: 16, offset: 6}" :sm="4" :md="6" :lg="8" :xl="6">
+      <a-col :xs="{span: 0}" :sm="4" :md="6" :lg="8" :xl="6">
         <a-popconfirm
             title="确认退出登录?"
             ok-text="是"

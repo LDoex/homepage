@@ -1,7 +1,7 @@
 <template>
   <a-layout>
     <a-layout-sider
-        width="200"
+        width="280"
         style="background: #fff"
         collapsed-width="0"
         breakpoint='xl'
