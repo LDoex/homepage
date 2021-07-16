@@ -149,6 +149,13 @@
             </a-form-item>
             <a-form-item>
               <div id="contentEditor"></div>
+              <div id="Editor">
+                <editor id="editor_id" height="500px" width="700px" v-model:title="editorText"
+                        :afterChange="afterChange()"
+                        :loadStyleMode="false"
+                        @on-content-change="onContentChange"></editor>
+                <div> editorTextCopy: {{ editorTextCopy }} </div>
+              </div>
             </a-form-item>
           </a-form>
         </a-col>
@@ -157,7 +164,6 @@
       <a-drawer width="900" placement="right" :closable="false" :visible="drawerVisible" @close="onDrawerClose">
         <div class="wangeditor" :innerHTML="previewHtml"></div>
       </a-drawer>
-
     </a-layout-content>
   </a-layout>
 
@@ -171,9 +177,12 @@ import {Tool} from '@/util/tool';
 import {useRoute} from "vue-router";
 import {ExclamationCircleOutlined} from "@ant-design/icons-vue";
 import E from "wangeditor";
-
+import editor from "@/components/kindeditor.vue";
 
 export default defineComponent({
+  components: {
+    editor,
+  },
   setup() {
 
     const isProfile = ref(false);
@@ -256,7 +265,7 @@ export default defineComponent({
         const data = response.data;
         if(data.success){
           otherList.value = data.content;
-          console.log("otherList",otherList.value);
+          // console.log("otherList",otherList.value);
         } else{
           message.error(data.message);
         }
@@ -293,9 +302,9 @@ export default defineComponent({
         const data = response.data;
         if(data.success){
           docList.value = data.content;
-          console.log("原始数组", docList.value);
+          // console.log("原始数组", docList.value);
           level1.value = Tool.array2Tree(docList.value, 0);
-          console.log("树形数组", level1.value);
+          // console.log("树形数组", level1.value);
 
           treeSelectData.value = Tool.copy(level1.value);
           //为树选择添加一个”无“
@@ -472,7 +481,7 @@ export default defineComponent({
           });
         },
         onCancel() {
-          console.log('Cancel');
+          // console.log('Cancel');
         },
         class: 'test',
       });
@@ -538,6 +547,17 @@ export default defineComponent({
       drawerVisible.value = false;
     };
 
+    // kindeditor文本框
+    const editorText: any = "初始化对象";
+    const editorTextCopy = ref();
+    const onContentChange = (val: any) => {
+      editorTextCopy.value = val;
+      console.log("val", val);
+    };
+    const afterChange = () => {
+      console.log("afterChange");
+    };
+
     onMounted(()=>{
       handleQuery();
       handleOtherQuery();
@@ -577,6 +597,11 @@ export default defineComponent({
       previewHtml,
       handlePreviewContent,
       onDrawerClose,
+
+      editorText,
+      editorTextCopy,
+      onContentChange,
+      afterChange,
 
     };
   },

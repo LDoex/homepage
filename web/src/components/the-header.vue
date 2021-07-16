@@ -108,7 +108,7 @@ export default defineComponent({
 
     //登录
     const login = () => {
-      console.log("开始登录");
+      // console.log("开始登录");
       loginModalLoading.value = true;
       loginUser.value.password = hexMd5(loginUser.value.password + KEY);
       axios.post("/user/login", loginUser.value).then((response) => {
@@ -126,7 +126,7 @@ export default defineComponent({
 
     //退出登录
     const logout = () => {
-      console.log("退出登录开始");
+      // console.log("退出登录开始");
       axios.get("/user/logout/"+user.value.token).then((response) => {
         const data = response.data;
         if(data.success){

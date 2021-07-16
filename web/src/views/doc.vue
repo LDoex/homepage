@@ -96,7 +96,7 @@ import {message} from "ant-design-vue";
 export default defineComponent({
   setup() {
     const onChange = (link: string) => {
-      console.log('Anchor:OnChange', link);
+      // console.log('Anchor:OnChange', link);
     };
     const route = useRoute();
     const level1 = ref();
@@ -116,9 +116,9 @@ export default defineComponent({
         const data = response.data;
         if(data.success){
           docList.value = data.content;
-          console.log("原始数组", docList.value);
+          // console.log("原始数组", docList.value);
           level1.value = Tool.array2Tree(docList.value, 0);
-          console.log("树形数组", level1.value);
+          // console.log("树形数组", level1.value);
 
           //从docList.value拿到key值，再用key作为索引查id
           for (let docListKey in docList.value) {
@@ -175,7 +175,7 @@ export default defineComponent({
 
     const onBreakpoint = (broken: any) => {
       drawHandleVisible.value = broken;
-      console.log(drawHandleVisible);
+      // console.log(drawHandleVisible);
     };
 
     /**
@@ -193,7 +193,7 @@ export default defineComponent({
         const data = response.data;
         if(data.success){
           imageurl.value = data.content.list[0].cover;
-          console.log(imageurl.value);
+          // console.log(imageurl.value);
         } else{
           message.error(data.message);
         }

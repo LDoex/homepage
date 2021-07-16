@@ -128,6 +128,7 @@ public class DocService {
         ContentExample.Criteria criteria = contentExample.createCriteria();
 
         criteria.andIdIn(idsStr);
+        contentExample.setOrderByClause("sort asc");
         List<Content> contents = contentMapper.selectByExampleWithBLOBs(contentExample);
         if(ObjectUtils.isEmpty(contents)){
             return Collections.emptyList();

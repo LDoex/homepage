@@ -109,7 +109,7 @@ export default defineComponent({
      * 根据子id查父id
      **/
     const getParentId = (cid: any) => {
-      console.log(cid)
+      // console.log(cid)
       let result = "";
       homeCategoryList.forEach((item:any)=>{
         if(item.id === cid){
@@ -126,7 +126,7 @@ export default defineComponent({
     const getParentName = (cid: any) => {
       //console.log(cid)
       let result = "";
-      console.log("pid", getParentId(cid));
+      // console.log("pid", getParentId(cid));
       result = getCategoryName(getParentId(cid));
       return result;
     };
@@ -160,7 +160,7 @@ export default defineComponent({
         if(data.success){
           homeCategoryList = data.content;
           level1.value = Tool.array2Tree(homeCategoryList, 0);
-          console.log("树形",level1.value);
+          // console.log("树形",level1.value);
 
           //加载完分类数据才加载列表数据
           handleQuery();

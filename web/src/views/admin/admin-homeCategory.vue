@@ -147,9 +147,9 @@ export default defineComponent({
         const data = response.data;
         if(data.success){
           memList.value = data.content;
-          console.log("原始数组", memList.value);
+          // console.log("原始数组", memList.value);
           level1.value = Tool.array2Tree(memList.value, 0);
-          console.log("树形数组", level1.value);
+          // console.log("树形数组", level1.value);
           levelList.value = Tool.copy(level1);
 
         } else{
