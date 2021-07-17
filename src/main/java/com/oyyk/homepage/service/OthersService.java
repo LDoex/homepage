@@ -92,7 +92,10 @@ public class OthersService {
             others.setId(req.getId());
             othersMapper.insert(others);
         } else{
-            othersMapper.updateByPrimaryKeyWithBLOBs(others);
+            int count = othersMapper.updateByPrimaryKeyWithBLOBs(others);
+            if(count==0){
+                othersMapper.insert(others);
+            }
         }
     }
 
