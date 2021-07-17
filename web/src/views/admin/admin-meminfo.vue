@@ -33,7 +33,7 @@
           @change="handleTableChange"
       >
         <template #cover="{ text: cover }">
-          <img v-if="cover" :src="cover" alt="avatar" height="80" width="50"/>
+          <img v-if="cover" :src="cover" alt="avatar" height="80" width="56"/>
         </template>
         <template v-slot:action="{text, record}">
           <a-space size="small">
@@ -83,7 +83,25 @@
   >
     <a-form :model="memberItem">
       <a-form-item label="封面">
-        <a-input v-model:value="memberItem.cover" />
+<!--        <a-input v-model:value="memberItem.cover" />-->
+        <a-upload
+            v-model:file-list="fileList"
+            name="file"
+            list-type="picture-card"
+            action="http://localhost:8880/file/upload"
+            :headers="headers"
+            :before-upload="beforeUpload"
+            @change="handleChange"
+            @preview="handlePreview"
+        >
+          <div v-if="fileList.length < 1">
+            <plus-outlined />
+            <div class="ant-upload-text">Upload</div>
+          </div>
+        </a-upload>
+        <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
+          <img alt="example" style="width: 100%" :src="previewImage" />
+        </a-modal>
       </a-form-item>
       <a-form-item label="姓名">
         <a-input v-model:value="memberItem.name" />
@@ -110,7 +128,34 @@ import { defineComponent,ref,onMounted } from 'vue';
 import axios from 'axios';
 import { message } from 'ant-design-vue';
 import {Tool} from '@/util/tool';
+import store from "@/store";
 
+interface FileItem {
+  uid: string;
+  name?: string;
+  status?: string;
+  response?: string;
+  percent?: number;
+  url?: string;
+  preview?: string;
+  originFileObj?: any;
+  size: number;
+  type?: string
+}
+
+interface FileInfo {
+  file: FileItem;
+  fileList: FileItem[];
+}
+
+function getBase64(file: File) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
 
 export default defineComponent({
   setup() {
@@ -280,6 +325,7 @@ export default defineComponent({
      * @param record
      */
     const edit = (record: any) => {
+      fileList.value = [];
       modalVisible.value = true;
       memberItem.value = Tool.copy(record);
       homeCategoryIds.value = [memberItem.value.category1Id, memberItem.value.category2Id];
@@ -289,6 +335,7 @@ export default defineComponent({
      * 新增
      */
     const add = () => {
+      fileList.value = [];
       modalVisible.value = true;
       memberItem.value = {};
 
@@ -322,6 +369,41 @@ export default defineComponent({
       return result;
     };
 
+    //文件上传
+    const fileList = ref<FileItem[]>([]);
+    const previewVisible = ref<boolean>(false);
+    const previewImage = ref<string | undefined>('');
+    const uploadLoading = ref<boolean>(false);
+    const handleChange = ({ fileList: newFileList }: FileInfo) => {
+      fileList.value = newFileList;
+      const file: any = newFileList[0].response;
+      memberItem.value.cover = file.content;
+    };
+
+
+    const beforeUpload = (file: FileItem) => {
+      const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+      if (!isJpgOrPng) {
+        message.error('You can only upload JPG file!');
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        message.error('Image must smaller than 2MB!');
+      }
+      return isJpgOrPng && isLt2M;
+    };
+
+    const handleCancel = () => {
+      previewVisible.value = false;
+    };
+    const handlePreview = async (file: FileItem) => {
+      if (!file.url && !file.preview) {
+        file.preview = (await getBase64(file.originFileObj)) as string;
+      }
+      previewImage.value = file.url || file.preview;
+      previewVisible.value = true;
+    };
+
 
 
 
@@ -350,6 +432,21 @@ export default defineComponent({
       homeCategoryIds,
       level1,
       getCategoryName,
+      beforeUpload,
+
+      fileList,
+      headers: {
+        authorization: 'authorization-text',
+        token: store.state.user.token,
+      },
+      handleChange,
+      uploadLoading,
+      previewVisible,
+      handleCancel,
+      handlePreview,
+      previewImage
+
+
 
     };
   },
