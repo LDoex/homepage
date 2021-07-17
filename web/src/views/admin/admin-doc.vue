@@ -151,10 +151,10 @@
               <div id="contentEditor"></div>
               <div id="Editor">
                 <editor id="editor_id" height="500px" width="700px" v-model:title="editorText"
-                        :afterChange="afterChange()"
                         :loadStyleMode="false"
+                        :allow-file-manager="true"
+                        :content="editorTextCopy"
                         @on-content-change="onContentChange"></editor>
-                <div> editorTextCopy: {{ editorTextCopy }} </div>
               </div>
             </a-form-item>
           </a-form>
@@ -329,7 +329,7 @@ export default defineComponent({
     const handleSave = () => {
       modalLoading.value = true;
       docItem.value.outcateId = route.query.outCateId;
-      docItem.value.content = editor.txt.html();
+      docItem.value.content = editorTextCopy.value;
       axios.post("/doc/save", docItem.value).then((response)=>{
         modalLoading.value = false;
         const data = response.data;
@@ -338,6 +338,7 @@ export default defineComponent({
           message.success("保存成功");
           //清空
           editor.txt.html("");
+          editorTextCopy.value = "";
           docItem.value = {}
           //重新加载列表
           handleQuery();
@@ -386,6 +387,7 @@ export default defineComponent({
         const data = response.data;
 
         if(data.success){
+          onContentChange(data.content);
           editor.txt.html(data.content);
         } else{
           message.error(data.message);
@@ -402,6 +404,7 @@ export default defineComponent({
       isProfile.value = false;
       //清空富文本框
       editor.txt.html("");
+      editorTextCopy.value = "";
       docItem.value = Tool.copy(record);
       handleQueryContent();
 
@@ -539,7 +542,7 @@ export default defineComponent({
     const drawerVisible = ref(false);
     const previewHtml = ref();
     const handlePreviewContent = () => {
-      const html = editor.txt.html();
+      const html = editorTextCopy.value;
       previewHtml.value = html;
       drawerVisible.value = true;
     };
@@ -548,7 +551,7 @@ export default defineComponent({
     };
 
     // kindeditor文本框
-    const editorText: any = "初始化对象";
+    const editorText: any = ref();
     const editorTextCopy = ref();
     const onContentChange = (val: any) => {
       editorTextCopy.value = val;
@@ -556,6 +559,9 @@ export default defineComponent({
     };
     const afterChange = () => {
       console.log("afterChange");
+    };
+    const afterUpload = (url: any, data :any, name: any) => {
+      console.log("afterUpload", url, data, name);
     };
 
     onMounted(()=>{
@@ -602,6 +608,7 @@ export default defineComponent({
       editorTextCopy,
       onContentChange,
       afterChange,
+      afterUpload,
 
     };
   },
