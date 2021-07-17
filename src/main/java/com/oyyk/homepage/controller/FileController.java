@@ -41,11 +41,11 @@ public class FileController {
         String originalFilename = file.getOriginalFilename();
         //获取上传路径
         Long flag = snowFlake.nextId();
-        String rootFilePath = System.getProperty("user.dir") + "/src/main/resources/files/" + flag + '_' + originalFilename;
+        String rootFilePath = System.getProperty("user.dir") + "/web/public/image/" + flag + '_' + originalFilename;
         //写入文件
         FileUtil.writeBytes(file.getBytes(), rootFilePath);
         //返回结果
-        resp.setContent(ip+":"+port+"/file/"+flag); //返回url
+        resp.setContent("/image/"+flag+ '_' + originalFilename); //返回url
         return resp;
     }
 
