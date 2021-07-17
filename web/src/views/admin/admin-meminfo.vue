@@ -88,7 +88,7 @@
             v-model:file-list="fileList"
             name="file"
             list-type="picture-card"
-            action="http://localhost:8880/file/upload"
+            :action="baseUrl + '/file/upload'"
             :headers="headers"
             :before-upload="beforeUpload"
             @change="handleChange"
@@ -233,6 +233,8 @@ export default defineComponent({
 
 
     let homeCategoryList: any;
+
+    const baseUrl = axios.defaults.baseURL;
 
     /**
      * 分类数据查询
@@ -444,9 +446,9 @@ export default defineComponent({
       previewVisible,
       handleCancel,
       handlePreview,
-      previewImage
+      previewImage,
 
-
+      baseUrl
 
     };
   },
