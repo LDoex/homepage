@@ -148,9 +148,8 @@
               </a-button>
             </a-form-item>
             <a-form-item>
-              <div id="contentEditor"></div>
               <div id="Editor">
-                <editor id="editor_id" height="500px" width="700px" v-model:title="editorText"
+                <editor id="editor_id" height="500px" width="100%" v-model:title="editorText"
                         :loadStyleMode="false"
                         :allow-file-manager="true"
                         :content="editorTextCopy"
@@ -186,13 +185,9 @@ export default defineComponent({
   setup() {
 
     const isProfile = ref(false);
-    const editor = new E("#contentEditor");
     const profileEditor = new E("#profileEditor");
     const footerEditor = new E("#footerEditor");
 
-    //文本框置底，允许上传图片
-    editor.config.zIndex = 0;
-    editor.config.uploadImgShowBase64 = true;
 
     const treeSelectData = ref();
     treeSelectData.value = [];
@@ -337,7 +332,6 @@ export default defineComponent({
 
           message.success("保存成功");
           //清空
-          editor.txt.html("");
           editorTextCopy.value = "";
           docItem.value = {}
           //重新加载列表
@@ -388,7 +382,6 @@ export default defineComponent({
 
         if(data.success){
           onContentChange(data.content);
-          editor.txt.html(data.content);
         } else{
           message.error(data.message);
         }
@@ -403,7 +396,6 @@ export default defineComponent({
     const edit = (record: any) => {
       isProfile.value = false;
       //清空富文本框
-      editor.txt.html("");
       editorTextCopy.value = "";
       docItem.value = Tool.copy(record);
       handleQueryContent();
@@ -421,7 +413,7 @@ export default defineComponent({
     const add = () => {
       isProfile.value = false;
       //清空富文本框
-      editor.txt.html("");
+      editorTextCopy.value = "";
       docItem.value = {
         outcateId: route.query.outCateId,
       };
@@ -555,19 +547,11 @@ export default defineComponent({
     const editorTextCopy = ref();
     const onContentChange = (val: any) => {
       editorTextCopy.value = val;
-      console.log("val", val);
-    };
-    const afterChange = () => {
-      console.log("afterChange");
-    };
-    const afterUpload = (url: any, data :any, name: any) => {
-      console.log("afterUpload", url, data, name);
     };
 
     onMounted(()=>{
       handleQuery();
       handleOtherQuery();
-      editor.create();
       profileEditor.create();
       footerEditor.create();
     });
@@ -607,8 +591,6 @@ export default defineComponent({
       editorText,
       editorTextCopy,
       onContentChange,
-      afterChange,
-      afterUpload,
 
     };
   },
