@@ -41,6 +41,7 @@ public class FileController {
         String originalFilename = file.getOriginalFilename();
         //获取上传路径
         Long flag = snowFlake.nextId();
+        //上传服务器时需要修改路径--去掉public
         String rootFilePath = System.getProperty("user.dir") + "/web/public/image/" + flag + '_' + originalFilename;
         //写入文件
         FileUtil.writeBytes(file.getBytes(), rootFilePath);
